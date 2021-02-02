@@ -30,6 +30,7 @@
         "sources": {
           "C:\\Program Files (x86)\\DevExpress 20.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\projects\\Vitkovice\\V.Server\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
