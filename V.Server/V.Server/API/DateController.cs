@@ -12,21 +12,13 @@ namespace V.Server.API
     public class DateController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<string> GetCurrentSeconds()
+        public ActionResult<long> GetCurrentSeconds()
         {
-            try
-            {
-                TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
-                DateTime cstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cstZone);
-                var year = cstTime.Year;
-                var firstInYear = new DateTime(year, 1, 1);
-                var seconds = (long)Math.Floor((cstTime - firstInYear).TotalSeconds);
-                return Ok(seconds.ToString());
-            }
-            catch (Exception ex)
-            {
-                return Ok(ex.ToString());
-            }
+            var now = DateTime.Now.AddHours(1);
+            var year = now.Year;
+            var firstInYear = new DateTime(year, 1, 1);
+            var seconds = (long)Math.Floor((now - firstInYear).TotalSeconds);
+            return Ok(seconds);
         }
     }
 }
