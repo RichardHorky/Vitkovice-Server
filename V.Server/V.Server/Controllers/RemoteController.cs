@@ -1,24 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace V.Server.API
+namespace V.Server.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DateController : ControllerBase
+    public class RemoteController : Controller
     {
-        [HttpGet]
-        public ActionResult<long> GetCurrentSeconds()
+        [Route("Remote")]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [Route("Remote/Date")]
+        public long Date()
         {
             var now = DateTime.Now.AddHours(1);
             var year = now.Year;
             var firstInYear = new DateTime(year, 1, 1);
             var seconds = (long)Math.Floor((now - firstInYear).TotalSeconds);
-            return Ok(seconds);
+            return seconds;
         }
     }
 }
