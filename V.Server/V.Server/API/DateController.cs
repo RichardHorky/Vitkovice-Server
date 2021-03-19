@@ -11,13 +11,13 @@ namespace V.Server.API
     [ApiController]
     public class DateController : ControllerBase
     {
-        public ActionResult<long> Get()
+        public ActionResult<string> Get()
         {
             var now = DateTime.Now.AddHours(1);
             var year = now.Year;
             var firstInYear = new DateTime(year, 1, 1);
             var seconds = (long)Math.Floor((now - firstInYear).TotalSeconds);
-            return Ok(seconds);
+            return Ok($"{{{seconds}}}");
         }
     }
 }
