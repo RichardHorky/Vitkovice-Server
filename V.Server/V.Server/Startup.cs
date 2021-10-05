@@ -29,7 +29,6 @@ namespace V.Server
             services.AddControllers();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<Data.ChangeNotifier>();
         }
 

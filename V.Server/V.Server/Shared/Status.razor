@@ -1,0 +1,324 @@
+﻿<h3>Stav</h3>
+<style>
+    .rotate {
+        transform-origin: 26px 0;
+        transform: rotate(90deg);
+    }
+    .panel {
+        max-width: 500px;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: gray;
+        padding: 10px;
+        border-radius: 6px
+    }
+    .item {
+        max-width: 30px;
+        background-color: gainsboro;
+        padding-bottom: 2px;
+        border-radius: 3px
+    }
+    .text-item {
+        padding-left: 30px;
+        height: 100px;
+        font-weight: bold;
+        color: gray;
+    }
+    .btext-item {
+        padding-left: 30px;
+        height: 70px;
+        font-weight: bold;
+        color: gray;
+    }
+    .led-item {
+        color: darkslategray;
+        padding-left: 7px;
+        height: 25px;
+    }
+    .led-green {
+        color: #38b000;
+        text-shadow: 0 0 6px #38b000;
+    }
+    .led-red {
+        color: red;
+        text-shadow: 0 0 6px red;
+    }
+    .button-item {
+        height: 30px;
+    }
+    .button {
+        height: 24px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .blink {
+        animation: blink-animation 1s infinite;
+        -webkit-animation: blink-animation 1s infinite;
+    }
+    @@keyframes blink-animation {
+        0% {
+            color: darkslategray;
+            text-shadow: none;
+        }
+
+        49% {
+            color: darkslategray;
+            text-shadow: none;
+        }
+
+        50% {
+            color: #38b000;
+            text-shadow: 0 0 6px #38b000;
+        }
+
+        99% {
+            color: #38b000;
+            text-shadow: 0 0 6px #38b000;
+        }
+    }
+    @@-webkit-keyframes blink-animation {
+        0% {
+            color: darkslategray;
+            text-shadow: none;
+        }
+
+        49% {
+            color: darkslategray;
+            text-shadow: none;
+        }
+
+        50% {
+            color: #38b000;
+            text-shadow: 0 0 6px #38b000;
+        }
+
+        99% {
+            color: #38b000;
+            text-shadow: 0 0 6px #38b000;
+        }
+    }
+</style>
+<div class="d-flex justify-content-between panel">
+    <div class="item">
+        <div class="rotate text-item">
+            Termostat&nbsp;1
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat1)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat1)"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-success button"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate btext-item">
+            CTRL
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Termostat&nbsp;2
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat2)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat2)"></button>
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            ElKotel
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.ElHeating)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.ElHeating)"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-success button"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate btext-item">
+            GSM
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Krb
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item led-red">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="rotate text-item">
+            Akumulace
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="button-item">
+
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-success button"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate btext-item">
+            WIFI
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Voda
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Water)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Water)"></button>
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Kamery
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Cams)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Cams)"></button>
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Alarm
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Alarm)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Alarm)"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-danger button"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate btext-item">
+            ALARM
+        </div>
+    </div>
+</div>
+
+@code {
+    Data.TransferData.FnItems _fnItems = new Data.TransferData.FnItems();
+
+    protected override void OnInitialized()
+    {
+        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Termostat1 });
+        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Termostat2 });
+        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.ElHeating });
+        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Water });
+        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Cams });
+        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Alarm });
+    }
+
+    string GetStatusClass(Data.TransferData.ButtonPressEnum buttonPress)
+    {
+        var item = _fnItems.Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+        switch (item.FnState)
+        {
+            case Data.TransferData.FnStateEnum.Off: return "";
+            case Data.TransferData.FnStateEnum.Auto: return "led-green";
+            case Data.TransferData.FnStateEnum.On: return "led-green blink";
+            default: throw new NotImplementedException();
+        }
+    }
+
+    async Task StatusButtonClicked(Data.TransferData.ButtonPressEnum buttonPress)
+    {
+        var item = _fnItems.Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+        item.SwitchState();
+        await InvokeAsync(StateHasChanged);
+    }
+}
