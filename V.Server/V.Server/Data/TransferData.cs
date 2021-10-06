@@ -79,25 +79,83 @@ namespace V.Server.Data
             }
         }
 
-        public class FnItems
+        public class FnItems : TransferDataBase
         {
-            public FnItems()
-            {
-                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Termostat1 });
-                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Termostat2 });
-                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.ElHeating });
-                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Water });
-                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Cams });
-                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Alarm });
-            }
             public void Reset()
             {
+                Date = DateTime.MinValue;
                 foreach (var item in Items)
                     item.FnState = FnStateEnum.Auto;
             }
+            public List<FnItem> Items { get; set; } = new List<FnItem>();
+            public void SwitchItem(ButtonPressEnum buttonPress)
+            {
+                var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new FnItem() { ButtonStatus = buttonPress };
+                    Items.Add(item);
+                }
+                item.SwitchState();
+                Date = DateTime.Now;
+                Source = SourceEnum.Server;
+            }
+            public FnStateEnum GetState(ButtonPressEnum buttonPress)
+            {
+                var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+                if (item == null)
+                    return FnStateEnum.Auto;
+                return item.FnState;
+            }
+        }
+
+        public class CmdItem
+        {
+            public ButtonPressEnum ButtonStatus { get; set; }
+            public bool Pressed { get; set; }
+        }
+
+        public class CmdItems : TransferDataBase
+        {
+            public void Reset()
+            {
+                Date = DateTime.MinValue;
+                foreach (var item in Items)
+                    item.Pressed = false;
+            }
+            public List<CmdItem> Items { get; set; } = new List<CmdItem>();
+            public void SetPressed(ButtonPressEnum buttonPress, bool pressed)
+            {
+                var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new CmdItem() { ButtonStatus = buttonPress };
+                    Items.Add(item);
+                }
+                item.Pressed = pressed;
+                Date = DateTime.Now;
+                Source = SourceEnum.Server;
+            }
+            public bool GetPressed(ButtonPressEnum buttonPress)
+            {
+                var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+                return item?.Pressed ?? false;
+            }
+        }
+
+        public class TransferDataBase
+        {
+            public TransferDataBase()
+            {
+                GenerateID();
+            }
             public SourceEnum Source { get; set; }
             public DateTime Date { get; set; }
-            public List<FnItem> Items { get; set; } = new List<FnItem>();
+            public string ID { get; set; }
+            private void GenerateID()
+            {
+                ID = Guid.NewGuid().ToString();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿<h3>Stav</h3>
+﻿@implements IDisposable
+
 <style>
     .rotate {
         transform-origin: 26px 0;
@@ -98,7 +99,48 @@
             text-shadow: 0 0 6px #38b000;
         }
     }
+    .info-table {
+        max-width: 900px;
+    }
 </style>
+<div class="info-table">
+    <div class="row">
+        <div class="col-sm-3"><b>Funkce</b></div>
+        <div class="col-sm-1"><b>Zdroj</b></div>
+        <div class="col-sm-3"><b>Poslední změna</b></div>
+        <div class="col-sm-3"><b>Od poslední změny</b></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">Přepínače stavů</div>
+        <div class="col-sm-1">
+            <div class="badge badge-info">@(_fnItems.Source == Data.TransferData.SourceEnum.Arduino ? "PANEL" : "SERVER")</div>
+        </div>
+        <div class="col-sm-3">
+            <div class="badge badge-info">@($"{_fnItems.Date:G}")</div>
+        </div>
+        <div class="col-sm-3">
+            <div class="badge badge-info">@($"{_fnItemsFromLastChange}")</div>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-danger btn-sm" @onclick="() => ResetFnItems()" disabled="@(_cmdItems.Source == Data.TransferData.SourceEnum.Arduino)">reset</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">Příkazy</div>
+        <div class="col-sm-1">
+            <div class="badge badge-info">@(_cmdItems.Source == Data.TransferData.SourceEnum.Arduino ? "PANEL" : "SERVER")</div>
+        </div>
+        <div class="col-sm-3">
+            <div class="badge badge-info">@($"{_cmdItems.Date:G}")</div>
+        </div>
+        <div class="col-sm-3">
+            <div class="badge badge-info">@($"{_cmdItemsFromLastChange}")</div>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-danger btn-sm" @onclick="() => ResetCmdItems()" disabled="@(_cmdItems.Source == Data.TransferData.SourceEnum.Arduino)">reset</button>
+        </div>
+    </div>
+</div>
 <div class="d-flex justify-content-between panel">
     <div class="item">
         <div class="rotate text-item">
@@ -118,18 +160,6 @@
         </div>
         <div class="d-flex button-item">
             <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat1)"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="d-flex">
-            <button class="btn btn-success button"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate btext-item">
-            CTRL
         </div>
     </div>
     <div class="item">
@@ -175,7 +205,7 @@
 
         </div>
         <div class="d-flex">
-            <button class="btn btn-success button"></button>
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
         </div>
         <div class="led-item">
 
@@ -207,7 +237,7 @@
 
         </div>
         <div class="d-flex">
-            <button class="btn btn-success button"></button>
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.WIFI) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.WIFI)"></button>
         </div>
         <div class="led-item">
 
@@ -279,7 +309,7 @@
 
         </div>
         <div class="d-flex">
-            <button class="btn btn-danger button"></button>
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.AlarmOff) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.AlarmOff)"></button>
         </div>
         <div class="led-item">
 
@@ -291,17 +321,64 @@
 </div>
 
 @code {
+    [Inject]
+    public Data.DataStorage DataStorage { get; set; }
+
     Data.TransferData.FnItems _fnItems = new Data.TransferData.FnItems();
+    Data.TransferData.CmdItems _cmdItems = new Data.TransferData.CmdItems();
+    string _fnItemsFromLastChange;
+    string _cmdItemsFromLastChange;
+    bool _disposed;
 
     protected override void OnInitialized()
     {
-        _fnItems.Reset();
+        var fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
+        if (fnItems == null)
+        {
+            _fnItems = new Data.TransferData.FnItems();
+            _fnItems.Reset();
+        }
+        else
+        {
+            _fnItems = fnItems;
+        }
+
+        var cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
+        if (cmdItems == null)
+        {
+            _cmdItems = new Data.TransferData.CmdItems();
+        }
+        else
+        {
+            _cmdItems = cmdItems;
+        }
+
+        DataLoop();
+    }
+
+    public void Dispose()
+    {
+        _disposed = true;
+    }
+
+    async void DataLoop()
+    {
+        await Task.Yield();
+        do
+        {
+            await Task.Delay(500);
+
+            _fnItemsFromLastChange = _fnItems.Date == DateTime.MinValue ? null : (DateTime.Now - _fnItems.Date).ToString();
+            _cmdItemsFromLastChange = _cmdItems.Date == DateTime.MinValue ? null : (DateTime.Now - _cmdItems.Date).ToString();
+            await InvokeAsync(StateHasChanged);
+        }
+        while (!_disposed);
     }
 
     string GetStatusClass(Data.TransferData.ButtonPressEnum buttonPress)
     {
-        var item = _fnItems.Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
-        switch (item.FnState)
+        var state = _fnItems.GetState(buttonPress);
+        switch (state)
         {
             case Data.TransferData.FnStateEnum.Off: return "";
             case Data.TransferData.FnStateEnum.Auto: return "led-green";
@@ -310,10 +387,45 @@
         }
     }
 
-    async Task StatusButtonClicked(Data.TransferData.ButtonPressEnum buttonPress)
+    void StatusButtonClicked(Data.TransferData.ButtonPressEnum buttonPress)
     {
-        var item = _fnItems.Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
-        item.SwitchState();
-        await InvokeAsync(StateHasChanged);
+        _fnItems.SwitchItem(buttonPress);
+        DataStorage.SaveData(_fnItems);
+    }
+
+    string GetCmdClass(Data.TransferData.ButtonPressEnum buttonPress)
+    {
+        var pressed = _cmdItems.GetPressed(buttonPress);
+        if (pressed)
+            return "btn-warning";
+
+        switch (buttonPress)
+        {
+            case Data.TransferData.ButtonPressEnum.GSM:
+            case Data.TransferData.ButtonPressEnum.WIFI:
+                return "btn-success";
+            case Data.TransferData.ButtonPressEnum.AlarmOff:
+                return "btn-danger";
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    void CmdButtonClicked(Data.TransferData.ButtonPressEnum buttonPress)
+    {
+        _cmdItems.SetPressed(buttonPress, true);
+        DataStorage.SaveData(_cmdItems);
+    }
+
+    void ResetFnItems()
+    {
+        _fnItems.Reset();
+        DataStorage.SaveData(_fnItems);
+    }
+
+    void ResetCmdItems()
+    {
+        _cmdItems.Reset();
+        DataStorage.SaveData(_cmdItems);
     }
 }
