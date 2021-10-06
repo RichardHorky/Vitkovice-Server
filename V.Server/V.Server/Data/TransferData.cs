@@ -81,6 +81,20 @@ namespace V.Server.Data
 
         public class FnItems
         {
+            public FnItems()
+            {
+                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Termostat1 });
+                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Termostat2 });
+                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.ElHeating });
+                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Water });
+                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Cams });
+                Items.Add(new FnItem() { ButtonStatus = ButtonPressEnum.Alarm });
+            }
+            public void Reset()
+            {
+                foreach (var item in Items)
+                    item.FnState = FnStateEnum.Auto;
+            }
             public SourceEnum Source { get; set; }
             public DateTime Date { get; set; }
             public List<FnItem> Items { get; set; } = new List<FnItem>();

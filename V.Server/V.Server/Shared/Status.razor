@@ -295,12 +295,7 @@
 
     protected override void OnInitialized()
     {
-        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Termostat1 });
-        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Termostat2 });
-        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.ElHeating });
-        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Water });
-        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Cams });
-        _fnItems.Items.Add(new Data.TransferData.FnItem() { ButtonStatus = Data.TransferData.ButtonPressEnum.Alarm });
+        _fnItems.Reset();
     }
 
     string GetStatusClass(Data.TransferData.ButtonPressEnum buttonPress)
