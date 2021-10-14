@@ -27,7 +27,7 @@ namespace V.Server.API
             var summerEnd = lastDayOfOct.AddDays(octSpan);
 
             if (now >= summerBegin && now < summerEnd)
-                now = now.AddDays(1);
+                now = now.AddHours(1);
 
             var year = now.Year;
             var firstInYear = new DateTime(year, 1, 1);
