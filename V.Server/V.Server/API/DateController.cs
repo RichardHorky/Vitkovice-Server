@@ -13,7 +13,8 @@ namespace V.Server.API
     {
         public ActionResult<string> Get()
         {
-            var now = DateTime.Now.AddHours(1);
+            TimeZoneInfo cst = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            var now = DateTime.UtcNow.AddHours(cst.GetUtcOffset(DateTime.UtcNow).TotalDays);
             var year = now.Year;
             var firstInYear = new DateTime(year, 1, 1);
             var seconds = (long)Math.Floor((now - firstInYear).TotalSeconds);

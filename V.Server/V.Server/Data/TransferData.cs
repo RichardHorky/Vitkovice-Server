@@ -67,6 +67,10 @@ namespace V.Server.Data
 
         public class FnItem
         {
+            public FnItem()
+            {
+                FnState = FnStateEnum.Auto;
+            }
             public ButtonPressEnum ButtonStatus { get; set; }
             public FnStateEnum FnState { get; set; }
             public void SwitchState()
