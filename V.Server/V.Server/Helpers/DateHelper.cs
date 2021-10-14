@@ -1,24 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace V.Server.API
+namespace V.Server.Helpers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DateController : ControllerBase
+    public class DateHelper
     {
-        private readonly Helpers.DateHelper _dateHelper;
-
-        public DateController(Helpers.DateHelper dateHelper)
-        {
-            _dateHelper = dateHelper;
-        }
-
-        public ActionResult<string> Get()
+        public long GetSeconds()
         {
             var now = DateTime.Now.AddHours(1);
             //get last march sunday
@@ -38,8 +27,7 @@ namespace V.Server.API
 
             var year = now.Year;
             var firstInYear = new DateTime(year, 1, 1);
-            var seconds = _dateHelper.GetSeconds();
-            return Ok($"{{{seconds}}}");
+            return (long)Math.Floor((now - firstInYear).TotalSeconds);
         }
     }
 }

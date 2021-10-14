@@ -141,10 +141,11 @@
         </div>
     </div>
 </div>
+
 <div class="d-flex justify-content-between panel">
     <div class="item">
         <div class="rotate text-item">
-            Termostat&nbsp;1
+            Alarm
         </div>
         <div class="led-item">
             <i class="fas fa-circle"></i>
@@ -155,63 +156,63 @@
         <div class="rotate text-item">
 
         </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat1)">
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Alarm)">
             <i class="fas fa-circle"></i>
         </div>
         <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat1)"></button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Termostat&nbsp;2
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat2)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat2)"></button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            ElKotel
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.ElHeating)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.ElHeating)"></button>
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Alarm)"></button>
         </div>
         <div class="led-item">
 
         </div>
         <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.AlarmOff) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.AlarmOff)"></button>
         </div>
         <div class="led-item">
 
         </div>
         <div class="rotate btext-item">
-            GSM
+            ALARM
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Kamery
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Cams)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Cams)"></button>
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Voda
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Water)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Water)"></button>
         </div>
     </div>
     <div class="item">
@@ -248,7 +249,7 @@
     </div>
     <div class="item">
         <div class="rotate text-item">
-            Voda
+            ElKotel
         </div>
         <div class="led-item">
             <i class="fas fa-circle"></i>
@@ -259,63 +260,63 @@
         <div class="rotate text-item">
 
         </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Water)">
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.ElHeating)">
             <i class="fas fa-circle"></i>
         </div>
         <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Water)"></button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Kamery
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Cams)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Cams)"></button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Alarm
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Alarm)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Alarm)"></button>
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.ElHeating)"></button>
         </div>
         <div class="led-item">
 
         </div>
         <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.AlarmOff) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.AlarmOff)"></button>
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
         </div>
         <div class="led-item">
 
         </div>
         <div class="rotate btext-item">
-            ALARM
+            GSM
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Termostat&nbsp;2
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat2)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat2)"></button>
+        </div>
+    </div>
+    <div class="item">
+        <div class="rotate text-item">
+            Termostat&nbsp;1
+        </div>
+        <div class="led-item">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate text-item">
+
+        </div>
+        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat1)">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="d-flex button-item">
+            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat1)"></button>
         </div>
     </div>
 </div>
@@ -323,6 +324,9 @@
 @code {
     [Inject]
     public Data.DataStorage DataStorage { get; set; }
+
+    [Inject]
+    public Data.ChangeNotifier ChangeNotifier { get; set; }
 
     Data.TransferData.FnItems _fnItems = new Data.TransferData.FnItems();
     Data.TransferData.CmdItems _cmdItems = new Data.TransferData.CmdItems();
@@ -332,6 +336,8 @@
 
     protected override void OnInitialized()
     {
+        ChangeNotifier.Notify += OnNotify;
+
         var fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
         if (fnItems == null)
         {
@@ -358,6 +364,7 @@
 
     public void Dispose()
     {
+        ChangeNotifier.Notify -= OnNotify;
         _disposed = true;
     }
 
@@ -427,5 +434,14 @@
     {
         _cmdItems.Reset();
         DataStorage.SaveData(_cmdItems);
+    }
+
+    async void OnNotify(object sender, object item)
+    {
+        if (item is Data.TransferData.SourceEnum.Arduino)
+        {
+            _fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
+            await InvokeAsync(StateHasChanged);
+        }
     }
 }

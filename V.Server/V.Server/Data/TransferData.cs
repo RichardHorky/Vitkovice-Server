@@ -85,6 +85,7 @@ namespace V.Server.Data
 
         public class FnItems : TransferDataBase
         {
+            private const int _EXP_SECONDS = 180;
             public void Reset()
             {
                 Date = DateTime.MinValue;
@@ -111,6 +112,17 @@ namespace V.Server.Data
                     return FnStateEnum.Auto;
                 return item.FnState;
             }
+            public void SetState(ButtonPressEnum buttonPress, FnStateEnum fnState)
+            {
+                var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new FnItem() { ButtonStatus = buttonPress };
+                    Items.Add(item);
+                }
+                item.FnState = fnState;
+            }
+            public bool Valid => Source == SourceEnum.Arduino || (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class CmdItem
