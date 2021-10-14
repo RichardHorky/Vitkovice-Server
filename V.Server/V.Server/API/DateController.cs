@@ -14,7 +14,9 @@ namespace V.Server.API
         public ActionResult<string> Get()
         {
             TimeZoneInfo cst = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            var now = DateTime.UtcNow.AddHours(cst.GetUtcOffset(DateTime.UtcNow).TotalDays);
+            var now = DateTime.Now.AddHours(1);
+            if (cst.IsDaylightSavingTime(now))
+                now = now.AddHours(1);
             var year = now.Year;
             var firstInYear = new DateTime(year, 1, 1);
             var seconds = (long)Math.Floor((now - firstInYear).TotalSeconds);
