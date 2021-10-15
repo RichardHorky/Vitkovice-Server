@@ -31,7 +31,7 @@ namespace V.Server.API
             var fnItemsList = new List<string>()
             {
                 seconds.ToString(),
-                (fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid ? fnItems.ID : string.Empty)
+                ((fnItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : string.Empty)
             };
             AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
             AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
@@ -65,7 +65,7 @@ namespace V.Server.API
 
         private void AddItemToList(List<string> list, Data.TransferData.ButtonPressEnum buttonPress, Data.TransferData.FnItems fnItems)
         {
-            list.Add(fnItems.Valid ? ((byte)fnItems.GetState(buttonPress)).ToString() : string.Empty);
+            list.Add((fnItems?.Valid ?? false) ? ((byte)fnItems.GetState(buttonPress)).ToString() : string.Empty);
         }
 
         private void ProcessStates(string[] items, TransferData.FnItems fnItems)
