@@ -9,7 +9,7 @@ namespace V.Server.Helpers
     {
         public long GetSeconds()
         {
-            var now = DateTime.Now.AddHours(1);
+            var now = DateTime.UtcNow.AddHours(1);
             //get last march sunday
             var marchDays = DateTime.DaysInMonth(now.Year, 3);
             var lastDayOfMarch = new DateTime(now.Year, 3, marchDays);
