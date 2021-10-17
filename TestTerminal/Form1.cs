@@ -16,7 +16,7 @@ namespace TestTerminal
     public partial class Form1 : Form
     {
         private readonly HttpClient _client;
-        private const string _BASE_ADDRESS = "https://localhost:5001/";
+        private const string _BASE_ADDRESS = "http://192.168.2.6:5000/";
         private const int _SYNC_SPAN = 20;
         private const int _DISP_TIME_SPAN = 10;
         private bool _divider;
@@ -51,11 +51,12 @@ namespace TestTerminal
             DispStatuses();
         }
 
+        private string _token;
         private async Task DoSync()
         {
             var fnItemsList = new List<string>()
             {
-                string.Empty, _lastFnItemsID
+                _token, string.Empty, _lastFnItemsID
             };
             AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Termostat1, _fnItems);
             AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Termostat2, _fnItems);
@@ -72,10 +73,11 @@ namespace TestTerminal
             result = result.Replace("{", "").Replace("}", "");
             var list = result.Split('|');
 
-            if (int.TryParse(list[0], out int baseSeconds))
+            if (int.TryParse(list[1], out int baseSeconds))
                 DispTime(baseSeconds);
 
-            _lastFnItemsID = list[1];
+            _token = list[0];
+            _lastFnItemsID = list[2];
             ProcessStates(list);
         }
 
@@ -183,12 +185,12 @@ namespace TestTerminal
 
         private void ProcessStates(string[] items)
         {
-            ProcessState(items[2], TransferData.ButtonPressEnum.Termostat1);
-            ProcessState(items[3], TransferData.ButtonPressEnum.Termostat2);
-            ProcessState(items[4], TransferData.ButtonPressEnum.ElHeating);
-            ProcessState(items[5], TransferData.ButtonPressEnum.Water);
-            ProcessState(items[6], TransferData.ButtonPressEnum.Cams);
-            ProcessState(items[7], TransferData.ButtonPressEnum.Alarm);
+            ProcessState(items[3], TransferData.ButtonPressEnum.Termostat1);
+            ProcessState(items[4], TransferData.ButtonPressEnum.Termostat2);
+            ProcessState(items[5], TransferData.ButtonPressEnum.ElHeating);
+            ProcessState(items[6], TransferData.ButtonPressEnum.Water);
+            ProcessState(items[7], TransferData.ButtonPressEnum.Cams);
+            ProcessState(items[8], TransferData.ButtonPressEnum.Alarm);
         }
 
         private void ProcessState(string value, TransferData.ButtonPressEnum buttonPress)
