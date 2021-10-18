@@ -70,11 +70,11 @@ namespace V.Server.API
         {
             try
             {
-                var list = data.Replace("{", "").Replace("}", "").Split('|');
+                var list = data.Split('|');
                 if (list.Length == 0 || !CheckToken(list[0]))
                     return;
 
-                var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
+                /*var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
                 var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
                 //is valid waiting - skip it
                 if (!validWaiting)
@@ -98,7 +98,7 @@ namespace V.Server.API
                     _dataStorage.SaveData(cmdItems);
                 }
 
-                _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);
+                _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);*/
             }
             catch (Exception ex)
             {
