@@ -86,7 +86,7 @@ namespace V.Server.API
                     _dataStorage.SaveData(fnItems);
                 }
 
-                /*var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
+                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
                 validWaiting = cmdItems.Source == TransferData.SourceEnum.Server && cmdItems.Valid && list[9] != cmdItems.ID;
                 //is valid waiting - skip it
                 if (!validWaiting)
@@ -96,7 +96,7 @@ namespace V.Server.API
                     cmdItems.Source = TransferData.SourceEnum.Arduino;
                     cmdItems.Date = DateTime.Now;
                     _dataStorage.SaveData(cmdItems);
-                }*/
+                }
 
                 _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);
             }
