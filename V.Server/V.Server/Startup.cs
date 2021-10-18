@@ -32,6 +32,7 @@ namespace V.Server
             services.AddSingleton<Data.ChangeNotifier>();
             services.AddScoped<Data.DataStorage>();
             services.AddScoped<Helpers.DateHelper>();
+            services.AddSingleton<Data.Errors>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

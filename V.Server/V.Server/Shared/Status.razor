@@ -322,6 +322,9 @@
     [Inject]
     public Data.ChangeNotifier ChangeNotifier { get; set; }
 
+    [Inject]
+    public Data.Errors Errors { get; set; }
+
     Data.TransferData.FnItems _fnItems = new Data.TransferData.FnItems();
     Data.TransferData.CmdItems _cmdItems = new Data.TransferData.CmdItems();
     string _fnItemsFromLastChange;
@@ -432,11 +435,18 @@
 
     async void OnNotify(object sender, object item)
     {
-        if (item is Data.TransferData.SourceEnum.Arduino)
+        try
         {
-            _fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
-            _cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
-            await InvokeAsync(StateHasChanged);
+            if (item is Data.TransferData.SourceEnum.Arduino)
+            {
+                _fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
+                _cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
         }
     }
 }

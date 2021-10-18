@@ -1,0 +1,17 @@
+﻿@page "/errorspage"
+
+<h3>Chyby</h3>
+
+@foreach (var item in Errors.ErrorList)
+{
+    <div class="row">
+        <div class="col-md-2">@item.Date</div>
+        <div class="col-md-2">@item.Text</div>
+    </div>
+}
+
+@code {
+    [Inject]
+    public Data.Errors Errors { get; set; }
+
+}

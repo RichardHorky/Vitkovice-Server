@@ -16,77 +16,94 @@ namespace V.Server.API
         private readonly Helpers.DateHelper _dateHelper;
         private readonly DataStorage _dataStorage;
         private readonly ChangeNotifier _changeNotifier;
+        private readonly Errors _errors;
         private const string _TOKEN_PASSWORD = "x4tr5Gj";
         private const string _INVALID_TOKEN = "invalid_token";
 
-        public SyncController(Helpers.DateHelper dateHelper, DataStorage dataStorage, ChangeNotifier changeNotifier)
+        public SyncController(Helpers.DateHelper dateHelper, DataStorage dataStorage, ChangeNotifier changeNotifier, Errors errors)
         {
             _dateHelper = dateHelper;
             _dataStorage = dataStorage;
             _changeNotifier = changeNotifier;
+            _errors = errors;
         }
 
         public ActionResult<string> Get()
         {
-            var seconds = _dateHelper.GetSeconds();
-            var fnItems = _dataStorage.GetData<Data.TransferData.FnItems>();
-            var itemsList = new List<string>()
+            try
+            {
+                var seconds = _dateHelper.GetSeconds();
+                var fnItems = _dataStorage.GetData<Data.TransferData.FnItems>();
+                var itemsList = new List<string>()
             {
                 GetToken(),
                 seconds.ToString(),
                 ((fnItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : string.Empty)
             };
-            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
-            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
-            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.ElHeating, fnItems);
-            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Water, fnItems);
-            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
-            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Alarm, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.ElHeating, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Water, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Alarm, fnItems);
 
-            var cmdItems = _dataStorage.GetData<TransferData.CmdItems>();
-            itemsList.Add((cmdItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? cmdItems.ID : string.Empty);
-            AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.GSM, cmdItems);
-            AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, cmdItems);
-            AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, cmdItems);
+                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>();
+                itemsList.Add((cmdItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? cmdItems.ID : string.Empty);
+                AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.GSM, cmdItems);
+                AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, cmdItems);
+                AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, cmdItems);
 
-            var resStr = string.Join('|', itemsList);
+                var resStr = string.Join('|', itemsList);
 
-            return Ok($"{{{resStr}}}");
+                return Ok($"{{{resStr}}}");
+            }
+            catch (Exception ex)
+            {
+                _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
+            }
+            return Ok();
         }
 
         [HttpGet]
         [Route("Post/{data}")]
         public void Post(string data)
         {
-            var list = data.Split('|');
-            if (list.Length == 0 || !CheckToken(list[0]))
-                return;
-
-            var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
-            var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
-            //is valid waiting - skip it
-            if (!validWaiting)
+            try
             {
-                fnItems = new TransferData.FnItems();
-                ProcessStates(list, fnItems);
-                fnItems.Source = TransferData.SourceEnum.Arduino;
-                fnItems.Date = DateTime.Now;
-                _dataStorage.SaveData(fnItems);
-            }
+                var list = data.Split('|');
+                if (list.Length == 0 || !CheckToken(list[0]))
+                    return;
 
-            var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
-            validWaiting = cmdItems.Source == TransferData.SourceEnum.Server && cmdItems.Valid && list[9] != cmdItems.ID;
-            //is valid waiting - skip it
-            if (!validWaiting)
+                var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
+                var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
+                //is valid waiting - skip it
+                if (!validWaiting)
+                {
+                    fnItems = new TransferData.FnItems();
+                    ProcessStates(list, fnItems);
+                    fnItems.Source = TransferData.SourceEnum.Arduino;
+                    fnItems.Date = DateTime.Now;
+                    _dataStorage.SaveData(fnItems);
+                }
+
+                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
+                validWaiting = cmdItems.Source == TransferData.SourceEnum.Server && cmdItems.Valid && list[9] != cmdItems.ID;
+                //is valid waiting - skip it
+                if (!validWaiting)
+                {
+                    cmdItems = new TransferData.CmdItems();
+                    ProcessStates(list, cmdItems);
+                    cmdItems.Source = TransferData.SourceEnum.Arduino;
+                    cmdItems.Date = DateTime.Now;
+                    _dataStorage.SaveData(cmdItems);
+                }
+
+                _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);
+            }
+            catch (Exception ex)
             {
-                cmdItems = new TransferData.CmdItems();
-                ProcessStates(list, cmdItems);
-                cmdItems.Source = TransferData.SourceEnum.Arduino;
-                cmdItems.Date = DateTime.Now;
-                _dataStorage.SaveData(cmdItems);
+                _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
-
-            _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);
         }
 
         [HttpGet]
