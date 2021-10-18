@@ -70,7 +70,7 @@ namespace V.Server.API
         {
             try
             {
-                var list = data.Split('|');
+                var list = data.Replace("{", "").Replace("}", "").Split('|');
                 if (list.Length == 0 || !CheckToken(list[0]))
                     return;
 
