@@ -96,7 +96,7 @@ namespace V.Server.API
                     cmdItems.Source = TransferData.SourceEnum.Arduino;
                     cmdItems.Date = DateTime.Now;
                     _dataStorage.SaveData(cmdItems);
-                }
+                }*/
 
                 _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);*/
             }
