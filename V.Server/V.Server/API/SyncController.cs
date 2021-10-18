@@ -119,7 +119,7 @@ namespace V.Server.API
             if (!int.TryParse(seconds, out int iSeconds))
                 return false;
             var nowSeconds = _dateHelper.GetSeconds();
-            if ((nowSeconds - iSeconds) > 60)
+            if ((nowSeconds - iSeconds) > 360)
                 return false;
             return true;
         }

@@ -122,7 +122,7 @@ namespace V.Server.Data
                 }
                 item.FnState = fnState;
             }
-            public bool Valid => Source == SourceEnum.Arduino || (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
+            public bool Valid => Source == SourceEnum.Server || (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class CmdItem
