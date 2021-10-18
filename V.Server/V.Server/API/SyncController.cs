@@ -48,7 +48,7 @@ namespace V.Server.API
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Alarm, fnItems);
 
                 var cmdItems = _dataStorage.GetData<TransferData.CmdItems>();
-                itemsList.Add((cmdItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? cmdItems.ID : string.Empty);
+                itemsList.Add((cmdItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (cmdItems?.Valid ?? false) ? cmdItems.ID : string.Empty);
                 AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.GSM, cmdItems);
                 AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, cmdItems);
                 AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, cmdItems);
