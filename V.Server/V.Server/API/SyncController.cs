@@ -98,7 +98,8 @@ namespace V.Server.API
                     _dataStorage.SaveData(cmdItems);
                 }
 
-                _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);
+                var args = new DataChangedArgs() { FnItems = fnItems, CmdItems = cmdItems };
+                _changeNotifier.OnNotify(args);
             }
             catch (Exception ex)
             {

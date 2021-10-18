@@ -438,10 +438,10 @@
         try
         {
             await Task.Delay(5000);
-            if (item is Data.TransferData.SourceEnum.Arduino)
+            if (item is Data.DataChangedArgs)
             {
-                //_fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
-                //_cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
+                _fnItems = (item as Data.DataChangedArgs).FnItems;
+                _cmdItems = (item as Data.DataChangedArgs).CmdItems;
                 await InvokeAsync(StateHasChanged);
             }
         }
