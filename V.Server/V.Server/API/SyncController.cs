@@ -74,8 +74,8 @@ namespace V.Server.API
                 if (list.Length == 0 || !CheckToken(list[0]))
                     return;
 
-                /*var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
-                var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
+                var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
+                /*var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
                 //is valid waiting - skip it
                 if (!validWaiting)
                 {
