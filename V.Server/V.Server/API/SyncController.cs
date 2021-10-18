@@ -75,9 +75,9 @@ namespace V.Server.API
                     return;
 
                 var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
-                /*var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
+                var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
                 //is valid waiting - skip it
-                if (!validWaiting)
+                /*if (!validWaiting)
                 {
                     fnItems = new TransferData.FnItems();
                     ProcessStates(list, fnItems);
