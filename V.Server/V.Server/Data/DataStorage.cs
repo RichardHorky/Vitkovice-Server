@@ -14,6 +14,9 @@ namespace V.Server.Data
         public DataStorage(Errors errors)
         {
             _errors = errors;
+            var fnFileName = GetFileName<TransferData.FnItems>();
+            if (!File.Exists(fnFileName))
+                SaveData(new TransferData.FnItems());
         }
 
         public void SaveData<T>(T data)

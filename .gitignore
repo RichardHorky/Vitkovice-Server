@@ -29,3 +29,5 @@ _ReSharper*/
 .vs/
 #Nuget packages folder
 packages/
+/V.Server/V.Server/dat/CmdItems.dat
+/V.Server/V.Server/dat/FnItems.dat
