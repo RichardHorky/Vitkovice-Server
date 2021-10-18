@@ -228,24 +228,6 @@
         <div class="rotate text-item">
             Akumulace
         </div>
-        <div class="led-item">
-
-        </div>
-        <div class="button-item">
-
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.WIFI) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.WIFI)"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate btext-item">
-            WIFI
-        </div>
     </div>
     <div class="item">
         <div class="rotate text-item">
@@ -270,13 +252,13 @@
 
         </div>
         <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.WIFI) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.WIFI)"></button>
         </div>
         <div class="led-item">
 
         </div>
         <div class="rotate btext-item">
-            GSM
+            WIFI
         </div>
     </div>
     <div class="item">
@@ -297,6 +279,18 @@
         </div>
         <div class="d-flex button-item">
             <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat2)"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="d-flex">
+            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
+        </div>
+        <div class="led-item">
+
+        </div>
+        <div class="rotate btext-item">
+            GSM
         </div>
     </div>
     <div class="item">
@@ -441,6 +435,7 @@
         if (item is Data.TransferData.SourceEnum.Arduino)
         {
             _fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
+            _cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
             await InvokeAsync(StateHasChanged);
         }
     }

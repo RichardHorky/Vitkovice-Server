@@ -30,20 +30,26 @@ namespace V.Server.API
         {
             var seconds = _dateHelper.GetSeconds();
             var fnItems = _dataStorage.GetData<Data.TransferData.FnItems>();
-            var fnItemsList = new List<string>()
+            var itemsList = new List<string>()
             {
                 GetToken(),
                 seconds.ToString(),
                 ((fnItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : string.Empty)
             };
-            AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
-            AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
-            AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.ElHeating, fnItems);
-            AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Water, fnItems);
-            AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
-            AddItemToList(fnItemsList, Data.TransferData.ButtonPressEnum.Alarm, fnItems);
+            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
+            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
+            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.ElHeating, fnItems);
+            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Water, fnItems);
+            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
+            AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Alarm, fnItems);
 
-            var resStr = string.Join('|', fnItemsList);
+            var cmdItems = _dataStorage.GetData<TransferData.CmdItems>();
+            itemsList.Add((cmdItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? cmdItems.ID : string.Empty);
+            AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.GSM, cmdItems);
+            AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, cmdItems);
+            AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, cmdItems);
+
+            var resStr = string.Join('|', itemsList);
 
             return Ok($"{{{resStr}}}");
         }
@@ -52,19 +58,34 @@ namespace V.Server.API
         [Route("Post/{data}")]
         public void Post(string data)
         {
-            var fnItems = _dataStorage.GetData<TransferData.FnItems>();
             var list = data.Split('|');
             if (list.Length == 0 || !CheckToken(list[0]))
                 return;
-            if (fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID)
+
+            var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
+            var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
+            //is valid waiting - skip it
+            if (!validWaiting)
             {
-                //is valid waiting - skip it
-                return;
+                fnItems = new TransferData.FnItems();
+                ProcessStates(list, fnItems);
+                fnItems.Source = TransferData.SourceEnum.Arduino;
+                fnItems.Date = DateTime.Now;
+                _dataStorage.SaveData(fnItems);
             }
-            fnItems = new TransferData.FnItems();
-            ProcessStates(list, fnItems);
-            fnItems.Source = TransferData.SourceEnum.Arduino;
-            _dataStorage.SaveData(fnItems);
+
+            var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
+            validWaiting = cmdItems.Source == TransferData.SourceEnum.Server && cmdItems.Valid && list[9] != cmdItems.ID;
+            //is valid waiting - skip it
+            if (!validWaiting)
+            {
+                cmdItems = new TransferData.CmdItems();
+                ProcessStates(list, cmdItems);
+                cmdItems.Source = TransferData.SourceEnum.Arduino;
+                cmdItems.Date = DateTime.Now;
+                _dataStorage.SaveData(cmdItems);
+            }
+
             _changeNotifier.OnNotify(TransferData.SourceEnum.Arduino);
         }
 
@@ -78,7 +99,12 @@ namespace V.Server.API
 
         private void AddItemToList(List<string> list, Data.TransferData.ButtonPressEnum buttonPress, Data.TransferData.FnItems fnItems)
         {
-            list.Add((fnItems?.Valid ?? false) ? ((byte)fnItems.GetState(buttonPress)).ToString() : string.Empty);
+            list.Add((fnItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? ((byte)fnItems.GetState(buttonPress)).ToString() : string.Empty);
+        }
+
+        private void AddCmdItemToList(List<string> list, Data.TransferData.ButtonPressEnum buttonPress, Data.TransferData.CmdItems cmdItems)
+        {
+            list.Add((cmdItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (cmdItems?.Valid ?? false) ? (cmdItems.GetPressed(buttonPress) ? "1" : "0") : string.Empty);
         }
 
         private void ProcessStates(string[] items, TransferData.FnItems fnItems)
@@ -91,11 +117,26 @@ namespace V.Server.API
             ProcessState(items[8], TransferData.ButtonPressEnum.Alarm, fnItems);
         }
 
+        private void ProcessStates(string[] items, TransferData.CmdItems cmdItems)
+        {
+            ProcessState(items[10], TransferData.ButtonPressEnum.GSM, cmdItems);
+            ProcessState(items[11], TransferData.ButtonPressEnum.WIFI, cmdItems);
+            ProcessState(items[12], TransferData.ButtonPressEnum.AlarmOff, cmdItems);
+        }
+
         private void ProcessState(string value, TransferData.ButtonPressEnum buttonPress, TransferData.FnItems fnItems)
         {
             if (byte.TryParse(value, out byte iState))
             {
                 fnItems.SetState(buttonPress, (TransferData.FnStateEnum)iState);
+            }
+        }
+
+        private void ProcessState(string value, TransferData.ButtonPressEnum buttonPress, TransferData.CmdItems cmdItems)
+        {
+            if (byte.TryParse(value, out byte iState))
+            {
+                cmdItems.SetPressed(buttonPress, iState == 1);
             }
         }
 

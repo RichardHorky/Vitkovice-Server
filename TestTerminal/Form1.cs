@@ -21,6 +21,10 @@ namespace TestTerminal
         private const int _DISP_TIME_SPAN = 10;
         private bool _divider;
         private string _lastFnItemsID;
+        private string _lastCmdItemsID;
+        private DateTime _gsmPressed = DateTime.MinValue;
+        private DateTime _wifiPressed = DateTime.MinValue;
+        private DateTime _alarmPressed = DateTime.MinValue;
 
         TransferData.FnItems _fnItems = new TransferData.FnItems();
         TransferData.CmdItems _cmdItems = new TransferData.CmdItems();
@@ -49,22 +53,35 @@ namespace TestTerminal
             _divider = !_divider;
             DispTime();
             DispStatuses();
+
+            if ((DateTime.Now - _gsmPressed).TotalSeconds > 30)
+                _cmdItems.SetPressed(TransferData.ButtonPressEnum.GSM, false);
+            if ((DateTime.Now - _wifiPressed).TotalSeconds > 30)
+                _cmdItems.SetPressed(TransferData.ButtonPressEnum.WIFI, false);
+            if ((DateTime.Now - _alarmPressed).TotalSeconds > 30)
+                _cmdItems.SetPressed(TransferData.ButtonPressEnum.AlarmOff, false);
         }
 
         private string _token;
         private async Task DoSync()
         {
-            var fnItemsList = new List<string>()
+            var itemsList = new List<string>()
             {
                 _token, string.Empty, _lastFnItemsID
             };
-            AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Termostat1, _fnItems);
-            AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Termostat2, _fnItems);
-            AddItemToList(fnItemsList, TransferData.ButtonPressEnum.ElHeating, _fnItems);
-            AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Water, _fnItems);
-            AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Cams, _fnItems);
-            AddItemToList(fnItemsList, TransferData.ButtonPressEnum.Alarm, _fnItems);
-            var dataStr = string.Join("|", fnItemsList);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.Termostat1, _fnItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.Termostat2, _fnItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.ElHeating, _fnItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.Water, _fnItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.Cams, _fnItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.Alarm, _fnItems);
+
+            itemsList.Add(_lastCmdItemsID);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.GSM, _cmdItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, _cmdItems);
+            AddItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, _cmdItems);
+
+            var dataStr = string.Join("|", itemsList);
 
             await _client.GetStringAsync($"api/sync/post/{dataStr}");
             _lastFnItemsID = null;
@@ -78,12 +95,18 @@ namespace TestTerminal
 
             _token = list[0];
             _lastFnItemsID = list[2];
+            _lastCmdItemsID = list[9];
             ProcessStates(list);
         }
 
         private void AddItemToList(List<string> list, TransferData.ButtonPressEnum buttonPress, TransferData.FnItems fnItems)
         {
             list.Add(((byte)fnItems.GetState(buttonPress)).ToString());
+        }
+
+        private void AddItemToList(List<string> list, TransferData.ButtonPressEnum buttonPress, TransferData.CmdItems cmdItems)
+        {
+            list.Add(cmdItems.GetPressed(buttonPress) ? "1" : "0");
         }
 
         private int _baseSeconds;
@@ -181,6 +204,22 @@ namespace TestTerminal
 
             if (btnPress.HasValue)
                 _fnItems.SwitchItem(btnPress.Value);
+
+            if (button == btnGSM)
+            {
+                _gsmPressed = DateTime.Now;
+                _cmdItems.SetPressed(TransferData.ButtonPressEnum.GSM, true);
+            }
+            if (button == btnWifi)
+            {
+                _wifiPressed = DateTime.Now;
+                _cmdItems.SetPressed(TransferData.ButtonPressEnum.WIFI, true);
+            }
+            if (button == btnAlarm)
+            {
+                _alarmPressed = DateTime.Now;
+                _cmdItems.SetPressed(TransferData.ButtonPressEnum.AlarmOff, true);
+            }
         }
 
         private void ProcessStates(string[] items)
@@ -191,6 +230,10 @@ namespace TestTerminal
             ProcessState(items[6], TransferData.ButtonPressEnum.Water);
             ProcessState(items[7], TransferData.ButtonPressEnum.Cams);
             ProcessState(items[8], TransferData.ButtonPressEnum.Alarm);
+
+            ProcessCmdState(items[10], TransferData.ButtonPressEnum.GSM);
+            ProcessCmdState(items[10], TransferData.ButtonPressEnum.WIFI);
+            ProcessCmdState(items[10], TransferData.ButtonPressEnum.AlarmOff);
         }
 
         private void ProcessState(string value, TransferData.ButtonPressEnum buttonPress)
@@ -198,6 +241,14 @@ namespace TestTerminal
             if (byte.TryParse(value, out byte iState))
             {
                 _fnItems.SetState(buttonPress, (TransferData.FnStateEnum)iState);
+            }
+        }
+
+        private void ProcessCmdState(string value, TransferData.ButtonPressEnum buttonPress)
+        {
+            if (byte.TryParse(value, out byte iState))
+            {
+                _cmdItems.SetPressed(buttonPress, iState == 1);
             }
         }
 

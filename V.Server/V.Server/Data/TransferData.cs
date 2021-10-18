@@ -133,6 +133,7 @@ namespace V.Server.Data
 
         public class CmdItems : TransferDataBase
         {
+            private const int _EXP_SECONDS = 180;
             public void Reset()
             {
                 Date = DateTime.MinValue;
@@ -157,6 +158,7 @@ namespace V.Server.Data
                 var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
                 return item?.Pressed ?? false;
             }
+            public bool Valid => Source == SourceEnum.Server || (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class TransferDataBase
