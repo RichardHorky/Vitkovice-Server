@@ -16,7 +16,7 @@ namespace V.Server.Data
             _errors = errors;
             var fnFileName = GetFileName<TransferData.FnItems>();
             if (!File.Exists(fnFileName))
-                SaveData(new TransferData.FnItems() { Date = DateTime.MinValue });
+                SaveData(new TransferData.FnItems() { Source = TransferData.SourceEnum.None });
         }
 
         public void SaveData<T>(T data)

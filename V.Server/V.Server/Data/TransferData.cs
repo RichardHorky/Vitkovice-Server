@@ -62,7 +62,8 @@ namespace V.Server.Data
         public enum SourceEnum : byte
         {
             Server = 0,
-            Arduino = 1
+            Arduino = 1,
+            None = 255
         }
 
         public class FnItem
@@ -122,7 +123,7 @@ namespace V.Server.Data
                 }
                 item.FnState = fnState;
             }
-            public bool Valid => Source == SourceEnum.Server || (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
+            public bool Valid => Source == SourceEnum.Server && (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class CmdItem
@@ -158,7 +159,7 @@ namespace V.Server.Data
                 var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
                 return item?.Pressed ?? false;
             }
-            public bool Valid => Source == SourceEnum.Server || (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
+            public bool Valid => Source == SourceEnum.Server && (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class TransferDataBase
