@@ -9,5 +9,7 @@ namespace V.Server.Data
     {
         public TransferData.FnItems FnItems { get; set; }
         public TransferData.CmdItems CmdItems { get; set; }
+        public TransferData.PanelItems<TransferData.InputStatusEnum> InputItems { get; set; }
+        public TransferData.PanelItems<TransferData.OutputStatusEnum> OutputItems { get; set; }
     }
 }

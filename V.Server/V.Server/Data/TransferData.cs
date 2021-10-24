@@ -23,7 +23,7 @@ namespace V.Server.Data
             Valv2Status = 0x800         //2048
         }
 
-        public enum OutputStatusEnum : short
+        public enum OutputStatusEnum
         {
             ElHeating = 0x1,            //1
             ElHeatingPump = 0x2,        //2
@@ -160,6 +160,32 @@ namespace V.Server.Data
                 return item?.Pressed ?? false;
             }
             public bool Valid => Source == SourceEnum.Server && (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
+        }
+
+        public class PanelItems<T> where T : Enum
+        {
+            public List<PanelItem<T>> Items { get; set; } = new List<PanelItem<T>>();
+            public void SetSate(T itemMember, FnStateEnum status)
+            {
+                var item = Items.Where(i => i.ItemMember.Equals(itemMember)).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new PanelItem<T>() { ItemMember = itemMember };
+                    Items.Add(item);
+                }
+                item.FnState = status;
+            }
+            public FnStateEnum GetState(T itemMember)
+            {
+                var item = Items.Where(i => i.ItemMember.Equals(itemMember)).FirstOrDefault();
+                return item?.FnState ?? FnStateEnum.Off;
+            }
+        }
+
+        public class PanelItem<T> where T: Enum
+        {
+            public T ItemMember { get; set; }
+            public FnStateEnum FnState { get; set; }
         }
 
         public class TransferDataBase

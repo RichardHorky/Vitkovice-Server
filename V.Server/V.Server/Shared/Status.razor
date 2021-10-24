@@ -14,6 +14,9 @@
         padding: 10px;
         border-radius: 6px
     }
+    .details {
+        color: white;
+    }
     .item {
         max-width: 30px;
         background-color: gainsboro;
@@ -31,6 +34,9 @@
         height: 70px;
         font-weight: bold;
         color: gray;
+    }
+    .led {
+        color: darkslategray;
     }
     .led-item {
         color: darkslategray;
@@ -53,56 +59,11 @@
         margin-left: auto;
         margin-right: auto;
     }
-    .blink {
-        animation: blink-animation 1s infinite;
-        -webkit-animation: blink-animation 1s infinite;
-    }
-    @@keyframes blink-animation {
-        0% {
-            color: darkslategray;
-            text-shadow: none;
-        }
-
-        49% {
-            color: darkslategray;
-            text-shadow: none;
-        }
-
-        50% {
-            color: #38b000;
-            text-shadow: 0 0 6px #38b000;
-        }
-
-        99% {
-            color: #38b000;
-            text-shadow: 0 0 6px #38b000;
-        }
-    }
-    @@-webkit-keyframes blink-animation {
-        0% {
-            color: darkslategray;
-            text-shadow: none;
-        }
-
-        49% {
-            color: darkslategray;
-            text-shadow: none;
-        }
-
-        50% {
-            color: #38b000;
-            text-shadow: 0 0 6px #38b000;
-        }
-
-        99% {
-            color: #38b000;
-            text-shadow: 0 0 6px #38b000;
-        }
-    }
     .info-table {
         max-width: 900px;
     }
 </style>
+
 <div class="info-table">
     <div class="row">
         <div class="col-sm-3"><b>Funkce</b></div>
@@ -142,175 +103,259 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-between panel">
-    <div class="item">
-        <div class="rotate text-item">
-            Alarm
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
+<div class="row">
+    <div class="col-lg-6">
+        <div class="d-flex justify-content-between panel">
+            <div class="item">
+                <div class="rotate text-item">
+                    Alarm
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item">
 
-        </div>
-        <div class="rotate text-item">
+                </div>
+                <div class="rotate text-item">
 
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Alarm)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Alarm)"></button>
-        </div>
-        <div class="led-item">
+                </div>
+                <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Alarm, "led-green")">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="d-flex button-item">
+                    <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Alarm)"></button>
+                </div>
+                <div class="led-item">
 
-        </div>
-        <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.AlarmOff) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.AlarmOff)"></button>
-        </div>
-        <div class="led-item">
+                </div>
+                <div class="d-flex">
+                    <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.AlarmOff) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.AlarmOff)"></button>
+                </div>
+                <div class="led-item">
 
-        </div>
-        <div class="rotate btext-item">
-            ALARM
+                </div>
+                <div class="rotate btext-item">
+                    ALARM
+                </div>
+            </div>
+            <div class="item">
+                <div class="rotate text-item">
+                    Kamery
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate text-item">
+
+                </div>
+                <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Cams, "led-green")">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="d-flex button-item">
+                    <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Cams)"></button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="rotate text-item">
+                    Voda
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate text-item">
+
+                </div>
+                <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Water, "led-green")">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="d-flex button-item">
+                    <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Water)"></button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="rotate text-item">
+                    Krb
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item led-red">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="rotate text-item">
+                    Akumulace
+                </div>
+            </div>
+            <div class="item">
+                <div class="rotate text-item">
+                    ElKotel
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate text-item">
+
+                </div>
+                <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.ElHeating, "led-green")">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="d-flex button-item">
+                    <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.ElHeating)"></button>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="d-flex">
+                    <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.WIFI) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.WIFI)"></button>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate btext-item">
+                    WIFI
+                </div>
+            </div>
+            <div class="item">
+                <div class="rotate text-item">
+                    Termostat&nbsp;2
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate text-item">
+
+                </div>
+                <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat2, "led-green")">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="d-flex button-item">
+                    <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat2)"></button>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="d-flex">
+                    <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate btext-item">
+                    GSM
+                </div>
+            </div>
+            <div class="item">
+                <div class="rotate text-item">
+                    Termostat&nbsp;1
+                </div>
+                <div class="led-item">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="led-item">
+
+                </div>
+                <div class="rotate text-item">
+
+                </div>
+                <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat1, "led-green")">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="d-flex button-item">
+                    <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat1)"></button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Kamery
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Cams)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Cams)"></button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Voda
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Water)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Water)"></button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Krb
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item led-red">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="rotate text-item">
-            Akumulace
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            ElKotel
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.ElHeating)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.ElHeating)"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.WIFI) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.WIFI)"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate btext-item">
-            WIFI
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Termostat&nbsp;2
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat2)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat2)"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="d-flex">
-            <button class="btn @GetCmdClass(Data.TransferData.ButtonPressEnum.GSM) button" @onclick="() => CmdButtonClicked(Data.TransferData.ButtonPressEnum.GSM)"></button>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate btext-item">
-            GSM
-        </div>
-    </div>
-    <div class="item">
-        <div class="rotate text-item">
-            Termostat&nbsp;1
-        </div>
-        <div class="led-item">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="led-item">
-
-        </div>
-        <div class="rotate text-item">
-
-        </div>
-        <div class="led-item @GetStatusClass(Data.TransferData.ButtonPressEnum.Termostat1)">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="d-flex button-item">
-            <button class="btn btn-primary button" @onclick="() => StatusButtonClicked(Data.TransferData.ButtonPressEnum.Termostat1)"></button>
+    <div class="col-lg-6">
+        <div class="panel details">
+            <div class="row">
+                <div class="col-sm-6"><b>Vstupy</b></div>
+                <div class="col-sm-6"><b>Výstupy</b></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Čerpadlo krb</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.FireplacePump, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Elektro kotel</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.ElHeating, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Akumulace krb</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.FireplacePump, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Kotel čerpadlo</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.ElHeatingPump, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Termostat 1</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.Termostat1, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Čerpadlo akumulace</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.PumpAku, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Termostat 2</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.Termostat2, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Reset WIFI</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.WifiReset, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Rozdílový term.</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.DiffTerm, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Zóna</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Zone, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Trubkový term.</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.PipeTerm, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Ohřev vody</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Water, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Ohřev vody SMS</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.SMSWater, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Kamery</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Cams, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Klíček alarmu</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.AlarmKey, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Alarm</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Alarm, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Alarm okruh 1</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.AlarmRound1, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Reset GSM</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.ResetGSM, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Alarm okruh 2</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.AlarmRound2, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Ventil 0</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Valv, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Stav ventilu 1</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.Valv1Status, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Ventil 1</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Valv1, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">Stav ventilu 2</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.Valv2Status, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-5">Ventil 2</div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.Valv2, "led-red")"><i class="fas fa-circle"></i></div>
+            </div>
         </div>
     </div>
 </div>
@@ -327,6 +372,8 @@
 
     Data.TransferData.FnItems _fnItems = new Data.TransferData.FnItems();
     Data.TransferData.CmdItems _cmdItems = new Data.TransferData.CmdItems();
+    Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum> _inputItems = new Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum>();
+    Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum> _outputItems = new Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>();
     string _fnItemsFromLastChange;
     string _cmdItemsFromLastChange;
     bool _disposed;
@@ -365,6 +412,7 @@
         _disposed = true;
     }
 
+    bool _divider;
     async void DataLoop()
     {
         await Task.Yield();
@@ -374,19 +422,37 @@
 
             _fnItemsFromLastChange = _fnItems.Date == DateTime.MinValue ? null : (DateTime.Now - _fnItems.Date).ToString();
             _cmdItemsFromLastChange = _cmdItems.Date == DateTime.MinValue ? null : (DateTime.Now - _cmdItems.Date).ToString();
+            _divider = !_divider;
             await InvokeAsync(StateHasChanged);
         }
         while (!_disposed);
     }
 
-    string GetStatusClass(Data.TransferData.ButtonPressEnum buttonPress)
+    string GetStatusClass(Data.TransferData.ButtonPressEnum buttonPress, string baseClass)
     {
         var state = _fnItems.GetState(buttonPress);
+        return GetStatusClass(state, baseClass);
+    }
+
+    string GetStatusClass(Data.TransferData.InputStatusEnum inputItem, string baseClass)
+    {
+        var state = _inputItems.GetState(inputItem);
+        return GetStatusClass(state, baseClass);
+    }
+
+    string GetStatusClass(Data.TransferData.OutputStatusEnum outputItem, string baseClass)
+    {
+        var state = _outputItems.GetState(outputItem);
+        return GetStatusClass(state, baseClass);
+    }
+
+    string GetStatusClass(Data.TransferData.FnStateEnum state, string baseClass)
+    {
         switch (state)
         {
             case Data.TransferData.FnStateEnum.Off: return "";
-            case Data.TransferData.FnStateEnum.Auto: return "led-green";
-            case Data.TransferData.FnStateEnum.On: return "led-green blink";
+            case Data.TransferData.FnStateEnum.Auto: return baseClass;
+            case Data.TransferData.FnStateEnum.On: return _divider ? "" : baseClass;
             default: throw new NotImplementedException();
         }
     }
@@ -442,6 +508,8 @@
             {
                 _fnItems = (item as Data.DataChangedArgs).FnItems;
                 _cmdItems = (item as Data.DataChangedArgs).CmdItems;
+                _inputItems = (item as Data.DataChangedArgs).InputItems;
+                _outputItems = (item as Data.DataChangedArgs).OutputItems;
                 await InvokeAsync(StateHasChanged);
             }
         }

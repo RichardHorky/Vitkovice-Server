@@ -16,11 +16,11 @@ namespace V.Server.Data
             _errors = errors;
         }
 
-        public void SaveData<T>(T data)
+        public void SaveData<T>(T data, string file = null)
         {
             try
             {
-                var fileName = GetFileName<T>();
+                var fileName = file ?? GetFileName<T>();
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 var strData = JsonConvert.SerializeObject(data);

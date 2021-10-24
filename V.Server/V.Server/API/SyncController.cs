@@ -98,7 +98,15 @@ namespace V.Server.API
                     _dataStorage.SaveData(cmdItems);
                 }
 
-                var args = new DataChangedArgs() { FnItems = fnItems, CmdItems = cmdItems };
+                var inputItems = new TransferData.PanelItems<TransferData.InputStatusEnum>();
+                ProcessStates(13, list, inputItems);
+                _dataStorage.SaveData(inputItems, "InputItems");
+
+                var outputItems = new TransferData.PanelItems<TransferData.OutputStatusEnum>();
+                ProcessStates(25, list, outputItems);
+                _dataStorage.SaveData(outputItems, "OutputItems");
+
+                var args = new DataChangedArgs() { FnItems = fnItems, CmdItems = cmdItems, InputItems = inputItems, OutputItems = outputItems };
                 _changeNotifier.OnNotify(args);
             }
             catch (Exception ex)
@@ -140,6 +148,18 @@ namespace V.Server.API
             ProcessState(items[10], TransferData.ButtonPressEnum.GSM, cmdItems);
             ProcessState(items[11], TransferData.ButtonPressEnum.WIFI, cmdItems);
             ProcessState(items[12], TransferData.ButtonPressEnum.AlarmOff, cmdItems);
+        }
+
+        private void ProcessStates<T>(int startPos, string[] items, TransferData.PanelItems<T> panelItems) where T: Enum
+        {
+            var enumList = Enum.GetValues(typeof(T)).Cast<T>().ToArray();
+            for (int i = 0; i < 12; i++)
+            {
+                if (byte.TryParse(items[startPos + i], out byte iState))
+                {
+                    panelItems.SetSate(enumList[i], (TransferData.FnStateEnum)iState);
+                }
+            }
         }
 
         private void ProcessState(string value, TransferData.ButtonPressEnum buttonPress, TransferData.FnItems fnItems)
