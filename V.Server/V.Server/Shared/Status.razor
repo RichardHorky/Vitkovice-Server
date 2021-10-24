@@ -110,7 +110,7 @@
                 <div class="rotate text-item">
                     Alarm
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.OutputStatusEnum.Alarm, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="led-item">
@@ -142,7 +142,7 @@
                 <div class="rotate text-item">
                     Kamery
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.OutputStatusEnum.Cams, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="led-item">
@@ -162,7 +162,7 @@
                 <div class="rotate text-item">
                     Voda
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.OutputStatusEnum.Water, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="led-item">
@@ -182,10 +182,10 @@
                 <div class="rotate text-item">
                     Krb
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.FireplacePump, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
-                <div class="led-item led-red">
+                <div class="led-item  @GetStatusClass(Data.TransferData.OutputStatusEnum.PumpAku, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="rotate text-item">
@@ -196,7 +196,7 @@
                 <div class="rotate text-item">
                     ElKotel
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.OutputStatusEnum.ElHeating, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="led-item">
@@ -228,7 +228,7 @@
                 <div class="rotate text-item">
                     Termostat&nbsp;2
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.Termostat2, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="led-item">
@@ -260,7 +260,7 @@
                 <div class="rotate text-item">
                     Termostat&nbsp;1
                 </div>
-                <div class="led-item">
+                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.Termostat1, "led-red")">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="led-item">
@@ -292,7 +292,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">Akumulace krb</div>
-                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.FireplacePump, "led-red")"><i class="fas fa-circle"></i></div>
+                <div class="col-sm-1 led @GetStatusClass(Data.TransferData.InputStatusEnum.FireplaceAkum, "led-red")"><i class="fas fa-circle"></i></div>
                 <div class="col-sm-5">Kotel čerpadlo</div>
                 <div class="col-sm-1 led @GetStatusClass(Data.TransferData.OutputStatusEnum.ElHeatingPump, "led-red")"><i class="fas fa-circle"></i></div>
             </div>
