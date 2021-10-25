@@ -403,6 +403,13 @@
             _cmdItems = cmdItems;
         }
 
+        var inputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum>>("InputItems");
+        if (inputItems != null)
+            _inputItems = inputItems;
+        var outputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>>("OutputItems");
+        if (outputItems != null)
+            _outputItems = outputItems;
+
         DataLoop();
     }
 

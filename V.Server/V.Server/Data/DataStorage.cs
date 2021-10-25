@@ -16,15 +16,15 @@ namespace V.Server.Data
             _errors = errors;
         }
 
-        public void SaveData<T>(T data, string file = null)
+        public void SaveData<T>(T data, string name = null)
         {
             try
             {
-                var fileName = file ?? GetFileName<T>();
+                var fileName = GetFileName<T>(name);
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 var strData = JsonConvert.SerializeObject(data);
-                File.WriteAllText(GetFileName<T>(), strData);
+                File.WriteAllText(fileName, strData);
             }
             catch (Exception ex)
             {
@@ -32,11 +32,11 @@ namespace V.Server.Data
             }
         }
 
-        public T GetData<T>()
+        public T GetData<T>(string name = null)
         {
             try
             {
-                var fileName = GetFileName<T>();
+                var fileName = GetFileName<T>(name);
                 if (!File.Exists(fileName))
                     return default(T);
                 var strData = File.ReadAllText(fileName);
@@ -49,13 +49,13 @@ namespace V.Server.Data
             return default(T);
         }
 
-        private string GetFileName<T>()
+        private string GetFileName<T>(string name)
         {
             try
             {
                 if (!Directory.Exists($"./dat"))
                     Directory.CreateDirectory($"./dat");
-                return $"./dat/{typeof(T).Name}.dat";
+                return $"./dat/{(name ?? typeof(T).Name)}.dat";
             }
             catch (Exception ex)
             {

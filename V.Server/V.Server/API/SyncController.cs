@@ -84,6 +84,8 @@ namespace V.Server.API
                     fnItems.Source = TransferData.SourceEnum.Arduino;
                     fnItems.Date = DateTime.Now;
                     _dataStorage.SaveData(fnItems);
+                    //save to recovery after terminal has lost power
+                    _dataStorage.SaveData(fnItems, "FnRecovery");
                 }
 
                 var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
@@ -113,6 +115,35 @@ namespace V.Server.API
             {
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
+        }
+
+        [HttpGet]
+        [Route("Recovery")]
+        public ActionResult<string> Recovery()
+        {
+            try
+            {
+                var fnRecovery = _dataStorage.GetData<TransferData.FnItems>("FnRecovery");
+                if (fnRecovery == null)
+                    return Ok("{}");
+
+                var items = new List<string>();
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat1)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat2)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.ElHeating)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Water)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Cams)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Alarm)).ToString());
+
+                var resStr = string.Join('|', items);
+
+                return Ok($"{{{resStr}}}");
+            }
+            catch (Exception ex)
+            {
+                _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
+            }
+            return Ok("{}");
         }
 
         [HttpGet]
