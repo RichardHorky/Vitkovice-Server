@@ -34,9 +34,9 @@ namespace V.Server.Data
             Cams = 0x40,                //64
             Alarm = 0x80,               //128
             ResetGSM = 0x100,           //256
-            Valv = 0x200,               //512
-            Valv1 = 0x400,              //1024
-            Valv2 = 0x800               //2048
+            Valv1 = 0x200,               //512
+            Valv2 = 0x400,              //1024
+            Valv3 = 0x800               //2048
         }
 
         public enum ButtonPressEnum : short
