@@ -83,7 +83,7 @@
             <div class="badge badge-info">@($"{_fnItemsFromLastChange}")</div>
         </div>
         <div class="col-sm-1">
-            <button class="btn btn-danger btn-sm" @onclick="() => ResetFnItems()" disabled="@(_cmdItems.Source == Data.TransferData.SourceEnum.Arduino)">reset</button>
+            <button class="btn btn-danger btn-sm" @onclick="() => ResetFnItems()" disabled="@(_fnItems.Source == Data.TransferData.SourceEnum.Arduino)">reset</button>
         </div>
     </div>
     <div class="row">
