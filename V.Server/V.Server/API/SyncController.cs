@@ -125,7 +125,7 @@ namespace V.Server.API
             {
                 var fnRecovery = _dataStorage.GetData<TransferData.FnItems>("FnRecovery");
                 if (fnRecovery == null)
-                    return Ok("{}");
+                    return Ok("{none}");
 
                 var items = new List<string>();
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat1)).ToString());
