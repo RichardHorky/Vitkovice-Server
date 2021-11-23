@@ -1,0 +1,66 @@
+﻿@page "/servis"
+@using V.Server.Data
+
+<h3>Servis</h3>
+
+<div class="d-flex col-lg-6">
+    <input class="form-control" type="text" @bind-value="@_recoveryStr" />
+    <button class="btn btn-primary" @onclick="@(() => SetRecoveryStatus())">Nastavit</button>
+</div>
+
+@code {
+    [Inject]
+    public DataStorage DataStorage { get; set; }
+
+    string _recoveryStr { get; set; }
+
+    protected override void OnInitialized()
+    {
+        LoadRecoveryStatus();
+    }
+
+    void LoadRecoveryStatus()
+    {
+        var fnRecovery = DataStorage.GetData<TransferData.FnItems>("FnRecovery");
+        if (fnRecovery == null)
+        {
+            _recoveryStr = "{1|1|1|1|1|1}";
+            return;
+        }
+
+        var items = new List<string>();
+        items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat1)).ToString());
+        items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat2)).ToString());
+        items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.ElHeating)).ToString());
+        items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Water)).ToString());
+        items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Cams)).ToString());
+        items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Alarm)).ToString());
+
+        _recoveryStr = string.Join('|', items);
+    }
+
+    void SetRecoveryStatus()
+    {
+        var items = _recoveryStr.Split('|');
+        var fnItems = new TransferData.FnItems();
+
+        ProcessState(items[0], TransferData.ButtonPressEnum.Termostat1, fnItems);
+        ProcessState(items[1], TransferData.ButtonPressEnum.Termostat2, fnItems);
+        ProcessState(items[2], TransferData.ButtonPressEnum.ElHeating, fnItems);
+        ProcessState(items[3], TransferData.ButtonPressEnum.Water, fnItems);
+        ProcessState(items[4], TransferData.ButtonPressEnum.Cams, fnItems);
+        ProcessState(items[5], TransferData.ButtonPressEnum.Alarm, fnItems);
+
+        fnItems.Source = TransferData.SourceEnum.Arduino;
+        fnItems.Date = DateTime.Now;
+        DataStorage.SaveData(fnItems, "FnRecovery");
+    }
+
+    private void ProcessState(string value, TransferData.ButtonPressEnum buttonPress, TransferData.FnItems fnItems)
+    {
+        if (byte.TryParse(value, out byte iState))
+        {
+            fnItems.SetState(buttonPress, (TransferData.FnStateEnum)iState);
+        }
+    }
+}

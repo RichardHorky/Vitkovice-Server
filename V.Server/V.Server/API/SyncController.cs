@@ -66,13 +66,13 @@ namespace V.Server.API
 
         [HttpGet]
         [Route("Post/{data}")]
-        public void Post(string data)
+        public ActionResult Post(string data)
         {
             try
             {
                 var list = data.Split('|');
                 if (list.Length == 0 || !CheckToken(list[0]))
-                    return;
+                    return Ok();
 
                 var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
                 var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
@@ -115,6 +115,8 @@ namespace V.Server.API
             {
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
+
+            return Ok();
         }
 
         [HttpGet]
