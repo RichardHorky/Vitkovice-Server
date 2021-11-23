@@ -5,7 +5,7 @@
 @foreach (var item in Errors.ErrorList)
 {
     <div class="row">
-        <div class="col-md-2">@item.Date</div>
+        <div class="col-md-2">@(new Helpers.DateHelper().GetCentralDate(item.Date))</div>
         <div class="col-md-2">@item.Text</div>
     </div>
 }

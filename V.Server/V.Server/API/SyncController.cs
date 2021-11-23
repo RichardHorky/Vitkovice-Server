@@ -82,7 +82,7 @@ namespace V.Server.API
                     fnItems = new TransferData.FnItems();
                     ProcessStates(list, fnItems);
                     fnItems.Source = TransferData.SourceEnum.Arduino;
-                    fnItems.Date = DateTime.Now;
+                    fnItems.Date = DateTime.UtcNow;
                     _dataStorage.SaveData(fnItems);
                     //save to recovery after terminal has lost power
                     _dataStorage.SaveData(fnItems, "FnRecovery");
@@ -96,7 +96,7 @@ namespace V.Server.API
                     cmdItems = new TransferData.CmdItems();
                     ProcessStates(list, cmdItems);
                     cmdItems.Source = TransferData.SourceEnum.Arduino;
-                    cmdItems.Date = DateTime.Now;
+                    cmdItems.Date = DateTime.UtcNow;
                     _dataStorage.SaveData(cmdItems);
                 }
 

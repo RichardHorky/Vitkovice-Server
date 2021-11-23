@@ -103,7 +103,7 @@ namespace V.Server.Data
                     Items.Add(item);
                 }
                 item.SwitchState();
-                Date = DateTime.Now;
+                Date = DateTime.UtcNow;
                 Source = SourceEnum.Server;
             }
             public FnStateEnum GetState(ButtonPressEnum buttonPress)
@@ -123,7 +123,7 @@ namespace V.Server.Data
                 }
                 item.FnState = fnState;
             }
-            public bool Valid => Source == SourceEnum.Server && (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
+            public bool Valid => Source == SourceEnum.Server && (DateTime.UtcNow - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class CmdItem
@@ -151,7 +151,7 @@ namespace V.Server.Data
                     Items.Add(item);
                 }
                 item.Pressed = pressed;
-                Date = DateTime.Now;
+                Date = DateTime.UtcNow;
                 Source = SourceEnum.Server;
             }
             public bool GetPressed(ButtonPressEnum buttonPress)
@@ -159,7 +159,7 @@ namespace V.Server.Data
                 var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
                 return item?.Pressed ?? false;
             }
-            public bool Valid => Source == SourceEnum.Server && (DateTime.Now - Date).TotalSeconds <= _EXP_SECONDS;
+            public bool Valid => Source == SourceEnum.Server && (DateTime.UtcNow - Date).TotalSeconds <= _EXP_SECONDS;
         }
 
         public class PanelItems<T> where T : Enum

@@ -9,7 +9,7 @@ namespace V.Server.Data
     {
         public ErrorModel(string message)
         {
-            Date = DateTime.Now;
+            Date = DateTime.UtcNow;
             Text = message;
         }
         public DateTime Date { get; private set; }
