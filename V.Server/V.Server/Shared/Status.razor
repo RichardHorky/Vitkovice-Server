@@ -425,6 +425,7 @@
         catch (Exception ex)
         {
             _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
         }
     }
 
@@ -440,11 +441,19 @@
         await Task.Yield();
         do
         {
-            await Task.Delay(500);
+            try
+            {
+                await Task.Delay(500);
 
-            _fnItemsFromLastChange = _fnItems.Date == DateTime.MinValue ? null : (DateTime.UtcNow - _fnItems.Date).ToString();
-            _cmdItemsFromLastChange = _cmdItems.Date == DateTime.MinValue ? null : (DateTime.UtcNow - _cmdItems.Date).ToString();
-            _divider = !_divider;
+                _fnItemsFromLastChange = _fnItems.Date == DateTime.MinValue ? null : (DateTime.UtcNow - _fnItems.Date).ToString();
+                _cmdItemsFromLastChange = _cmdItems.Date == DateTime.MinValue ? null : (DateTime.UtcNow - _cmdItems.Date).ToString();
+                _divider = !_divider;
+            }
+            catch (Exception ex)
+            {
+                _error = ex.ToString();
+                Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+            }
             await InvokeAsync(StateHasChanged);
         }
         while (!_disposed);
@@ -452,73 +461,150 @@
 
     string GetStatusClass(Data.TransferData.ButtonPressEnum buttonPress, string baseClass)
     {
-        var state = _fnItems.GetState(buttonPress);
-        return GetStatusClass(state, baseClass);
+        try
+        {
+            var state = _fnItems.GetState(buttonPress);
+            return GetStatusClass(state, baseClass);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
+        return null;
     }
 
     string GetStatusClass(Data.TransferData.InputStatusEnum inputItem, string baseClass)
     {
-        var state = _inputItems.GetState(inputItem);
-        return GetStatusClass(state, baseClass);
+        try
+        {
+            var state = _inputItems.GetState(inputItem);
+            return GetStatusClass(state, baseClass);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
+        return null;
     }
 
     string GetStatusClass(Data.TransferData.OutputStatusEnum outputItem, string baseClass)
     {
-        var state = _outputItems.GetState(outputItem);
-        return GetStatusClass(state, baseClass);
+        try
+        {
+            var state = _outputItems.GetState(outputItem);
+            return GetStatusClass(state, baseClass);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
+        return null;
     }
 
     string GetStatusClass(Data.TransferData.FnStateEnum state, string baseClass)
     {
-        switch (state)
+        try
         {
-            case Data.TransferData.FnStateEnum.Off: return "";
-            case Data.TransferData.FnStateEnum.Auto: return baseClass;
-            case Data.TransferData.FnStateEnum.On: return _divider ? "" : baseClass;
-            default: throw new NotImplementedException();
+            switch (state)
+            {
+                case Data.TransferData.FnStateEnum.Off: return "";
+                case Data.TransferData.FnStateEnum.Auto: return baseClass;
+                case Data.TransferData.FnStateEnum.On: return _divider ? "" : baseClass;
+                default: throw new NotImplementedException();
+            }
         }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
+        return null;
     }
 
     void StatusButtonClicked(Data.TransferData.ButtonPressEnum buttonPress)
     {
-        _fnItems.SwitchItem(buttonPress);
-        DataStorage.SaveData(_fnItems);
+        try
+        {
+            _fnItems.SwitchItem(buttonPress);
+            DataStorage.SaveData(_fnItems);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
     }
 
     string GetCmdClass(Data.TransferData.ButtonPressEnum buttonPress)
     {
-        var pressed = _cmdItems.GetPressed(buttonPress);
-        if (pressed)
-            return "btn-warning";
-
-        switch (buttonPress)
+        try
         {
-            case Data.TransferData.ButtonPressEnum.GSM:
-            case Data.TransferData.ButtonPressEnum.WIFI:
-                return "btn-success";
-            case Data.TransferData.ButtonPressEnum.AlarmOff:
-                return "btn-danger";
-            default:
-                throw new NotImplementedException();
+            var pressed = _cmdItems.GetPressed(buttonPress);
+            if (pressed)
+                return "btn-warning";
+
+            switch (buttonPress)
+            {
+                case Data.TransferData.ButtonPressEnum.GSM:
+                case Data.TransferData.ButtonPressEnum.WIFI:
+                    return "btn-success";
+                case Data.TransferData.ButtonPressEnum.AlarmOff:
+                    return "btn-danger";
+                default:
+                    throw new NotImplementedException();
+            }
         }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
+        return null;
     }
 
     void CmdButtonClicked(Data.TransferData.ButtonPressEnum buttonPress)
     {
-        _cmdItems.SetPressed(buttonPress, true);
-        DataStorage.SaveData(_cmdItems);
+        try
+        {
+            _cmdItems.SetPressed(buttonPress, true);
+            DataStorage.SaveData(_cmdItems);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
     }
 
     void ResetFnItems()
     {
-        _fnItems.Reset();
-        DataStorage.SaveData(_fnItems);
+        try
+        {
+            _fnItems.Reset();
+            DataStorage.SaveData(_fnItems);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
     }
 
     void ResetCmdItems()
     {
-        _cmdItems.Reset();
-        DataStorage.SaveData(_cmdItems);
+        try
+        {
+            _cmdItems.Reset();
+            DataStorage.SaveData(_cmdItems);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
     }
 
     async void OnNotify(object sender, object item)
@@ -537,6 +623,7 @@
         }
         catch (Exception ex)
         {
+            _error = ex.ToString();
             Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
         }
     }
