@@ -64,6 +64,13 @@
     }
 </style>
 
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert-danger">
+        @_error
+    </div>
+}
+
 <div class="info-table">
     <div class="row">
         <div class="col-sm-3"><b>Funkce</b></div>
@@ -377,45 +384,53 @@
     string _fnItemsFromLastChange;
     string _cmdItemsFromLastChange;
     bool _disposed;
+    string _error;
 
     protected override void OnInitialized()
     {
-        //ChangeNotifier.Notify += OnNotify;
-
-        /*var fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
-        if (fnItems == null)
+        try
         {
-            _fnItems = new Data.TransferData.FnItems();
-            _fnItems.Reset();
-        }
-        else
-        {
-            _fnItems = fnItems;
-        }
+            ChangeNotifier.Notify += OnNotify;
 
-        var cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
-        if (cmdItems == null)
-        {
-            _cmdItems = new Data.TransferData.CmdItems();
-        }
-        else
-        {
-            _cmdItems = cmdItems;
-        }
+            var fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
+            if (fnItems == null)
+            {
+                _fnItems = new Data.TransferData.FnItems();
+                _fnItems.Reset();
+            }
+            else
+            {
+                _fnItems = fnItems;
+            }
 
-        var inputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum>>("InputItems");
-        if (inputItems != null)
-            _inputItems = inputItems;
-        var outputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>>("OutputItems");
-        if (outputItems != null)
-            _outputItems = outputItems;
+            var cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
+            if (cmdItems == null)
+            {
+                _cmdItems = new Data.TransferData.CmdItems();
+            }
+            else
+            {
+                _cmdItems = cmdItems;
+            }
 
-        DataLoop();*/
+            var inputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum>>("InputItems");
+            if (inputItems != null)
+                _inputItems = inputItems;
+            var outputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>>("OutputItems");
+            if (outputItems != null)
+                _outputItems = outputItems;
+
+            DataLoop();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+        }
     }
 
     public void Dispose()
     {
-        //ChangeNotifier.Notify -= OnNotify;
+        ChangeNotifier.Notify -= OnNotify;
         _disposed = true;
     }
 
