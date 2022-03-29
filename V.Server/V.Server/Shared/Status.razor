@@ -513,7 +513,7 @@
                 case Data.TransferData.FnStateEnum.Off: return "";
                 case Data.TransferData.FnStateEnum.Auto: return baseClass;
                 case Data.TransferData.FnStateEnum.On: return _divider ? "" : baseClass;
-                default: throw new NotImplementedException();
+                default: throw new NotImplementedException($"Status '{state}' is not implemented");
             }
         }
         catch (Exception ex)
