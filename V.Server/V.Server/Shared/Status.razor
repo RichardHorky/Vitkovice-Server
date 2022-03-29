@@ -380,7 +380,7 @@
 
     protected override void OnInitialized()
     {
-        ChangeNotifier.Notify += OnNotify;
+        //ChangeNotifier.Notify += OnNotify;
 
         var fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
         if (fnItems == null)
@@ -415,7 +415,7 @@
 
     public void Dispose()
     {
-        ChangeNotifier.Notify -= OnNotify;
+        //ChangeNotifier.Notify -= OnNotify;
         _disposed = true;
     }
 
