@@ -33,6 +33,8 @@ namespace V.Server
             services.AddScoped<Data.DataStorage>();
             services.AddScoped<Helpers.DateHelper>();
             services.AddSingleton<Data.Errors>();
+            services.AddSingleton<Services.SMSHttpClient>();
+            services.AddHostedService<Services.SMSHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
