@@ -12,16 +12,19 @@ namespace V.Server.Services
         private readonly SMSHttpClient _smsHttpClient;
         private readonly Data.Errors _errors;
         private readonly IServiceProvider _serviceProvider;
+        private readonly Data.ChangeNotifier _changeNotifier;
         private const int _loopMinutes = 5;
 
         public SMSHostedService(
             SMSHttpClient smsHttpClient,
             Data.Errors errors,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            Data.ChangeNotifier changeNotifier)
         {
             _smsHttpClient = smsHttpClient;
             _errors = errors;
             _serviceProvider = serviceProvider;
+            _changeNotifier = changeNotifier;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -29,8 +32,11 @@ namespace V.Server.Services
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(_loopMinutes * 60 * 1000);
-                if (!cancellationToken.IsCancellationRequested)
-                    await TestStatus();
+                if (_changeNotifier.WatchDogEnabled)
+                {
+                    if (!cancellationToken.IsCancellationRequested)
+                        await TestStatus();
+                }
             }
         }
 

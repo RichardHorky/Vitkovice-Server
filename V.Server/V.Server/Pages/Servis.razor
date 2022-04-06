@@ -11,6 +11,10 @@
     <input class="form-control" type="text" @bind-value="@_smsMessage" />
     <button class="btn btn-primary col-2" @onclick="@(() => SendSMS())">Poslat SMS</button>
 </div>
+<div class="d-flex col-lg-6 mt-2">
+    <input class="my-auto mr-1" type="checkbox" @bind="@ChangeNotifier.WatchDogEnabled" />
+    <div class="my-auto">WatchDog zapnutý</div>
+</div>
 @if (!string.IsNullOrEmpty(_error))
 {
     <div class="alert-danger">@_error</div>
@@ -22,6 +26,9 @@
 
     [Inject]
     Services.SMSHttpClient SMSHttpClient { get; set; }
+
+    [Inject]
+    ChangeNotifier ChangeNotifier { get; set; }
 
     string _recoveryStr { get; set; }
     string _smsMessage { get; set; }

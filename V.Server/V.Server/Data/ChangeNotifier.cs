@@ -12,5 +12,7 @@ namespace V.Server.Data
         {
             Notify?.Invoke(this, item);
         }
+
+        public bool WatchDogEnabled { get; set; } = true;
     }
 }
