@@ -5,42 +5,45 @@
 <h3>Log</h3>
 
 <div class="small">
+    @{ bool odd = false; }
     @foreach (var logItem in SyncLog.OrderByDescending(i => i.Date))
     {
+        odd = !odd;
+        var bgClass = odd ? "bg-dark text-white" : "bg-secondary text-white";
         <div class="row">
-            <div class="col-md-1">
+            <div class="col-md-1 @bgClass">
                 @($"{(new Helpers.DateHelper().GetCentralDate(logItem.Date)):G}")
             </div>
-            <div class="col-md-5 bg-primary pt-1 pb-1">
+            <div class="col-md-5 bg-primary pb-1">
                 <div class="row">
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplacePump))">FireP</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplaceAkum))">FireAk</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat1))">T1</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat2))">T2</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.DiffTerm))">DiffT</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.PipeTerm))">PipeT</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.SMSWater))">WSMS</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmKey))">AKEY</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound1))">Alarm1</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound2))">Alarm2</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv1Status))">Valv1</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv2Status))">Valv2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplacePump), bgClass)">FireP</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplaceAkum), bgClass)">FireAk</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat1), bgClass)">T1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat2), bgClass)">T2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.DiffTerm), bgClass)">DiffT</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.PipeTerm), bgClass)">PipeT</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.SMSWater), bgClass)">WSMS</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmKey), bgClass)">AKEY</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound1), bgClass)">Alarm1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound2), bgClass)">Alarm2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv1Status), bgClass)">Valv1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv2Status), bgClass)">Valv2</div>
                 </div>
             </div>
-            <div class="col-md-5 bg-info pt-1 pb-1">
+            <div class="col-md-5 bg-info pb-1">
                 <div class="row">
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeating))">ElHeat</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeatingPump))">ElHeatP</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.PumpAku))">AkuP</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.WifiReset))">WifiR</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Zone))">Zone</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Water))">Water</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Cams))">Cams</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Alarm))">Alarm</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ResetGSM))">GSMR</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv1))">Valv1</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv2))">Valv2</div>
-                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv3))">Valv3</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeating), bgClass)">ElHeat</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeatingPump), bgClass)">ElHeatP</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.PumpAku), bgClass)">AkuP</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.WifiReset), bgClass)">WifiR</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Zone), bgClass)">Zone</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Water), bgClass)">Water</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Cams), bgClass)">Cams</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Alarm), bgClass)">Alarm</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ResetGSM), bgClass)">GSMR</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv1), bgClass)">Valv1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv2), bgClass)">Valv2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv3), bgClass)">Valv3</div>
                 </div>
             </div>
         </div>
@@ -72,12 +75,12 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private string GetStatusClass(Data.TransferData.FnStateEnum fnState)
+    private string GetStatusClass(Data.TransferData.FnStateEnum fnState, string bgClass)
     {
         switch (fnState)
         {
             case Data.TransferData.FnStateEnum.Off:
-                return "bg-secondary text-white";
+                return bgClass;
             case Data.TransferData.FnStateEnum.Auto:
                 return "bg-danger text-white";
         }
