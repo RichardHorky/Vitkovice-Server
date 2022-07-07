@@ -5,7 +5,7 @@
 <h3>Log</h3>
 
 <div class="small">
-    @foreach (var logItem in SyncLog)
+    @foreach (var logItem in SyncLog.OrderByDescending(i => i.Date))
     {
         <div class="row">
             <div class="col-md-1">
