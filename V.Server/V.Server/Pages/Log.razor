@@ -1,0 +1,86 @@
+﻿@page "/log"
+
+@implements IDisposable
+
+<h3>Log</h3>
+
+<div class="small">
+    @foreach (var logItem in SyncLog)
+    {
+        <div class="row">
+            <div class="col-md-1">
+                @($"{(new Helpers.DateHelper().GetCentralDate(logItem.Date)):G}")
+            </div>
+            <div class="col-md-5 bg-primary pt-1 pb-1">
+                <div class="row">
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplacePump))">FireP</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplaceAkum))">FireAk</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat1))">T1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat2))">T2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.DiffTerm))">DiffT</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.PipeTerm))">PipeT</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.SMSWater))">WSMS</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmKey))">AKEY</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound1))">Alarm1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound2))">Alarm2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv1Status))">Valv1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv2Status))">Valv2</div>
+                </div>
+            </div>
+            <div class="col-md-5 bg-info pt-1 pb-1">
+                <div class="row">
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeating))">ElHeat</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeatingPump))">ElHeatP</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.PumpAku))">AkuP</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.WifiReset))">WifiR</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Zone))">Zone</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Water))">Water</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Cams))">Cams</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Alarm))">Alarm</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ResetGSM))">GSMR</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv1))">Valv1</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv2))">Valv2</div>
+                    <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.Valv3))">Valv3</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Inject]
+    Data.ChangeNotifier ChangeNotifier { get; set; }
+
+    [Inject]
+    Data.SyncLog SyncLog { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ChangeNotifier.Notify += DataChanged;
+    }
+
+    public void Dispose()
+    {
+        ChangeNotifier.Notify -= DataChanged;
+    }
+
+    private async void DataChanged(object sender, object e)
+    {
+        if (!(e is Data.LogItem))
+            return;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string GetStatusClass(Data.TransferData.FnStateEnum fnState)
+    {
+        switch (fnState)
+        {
+            case Data.TransferData.FnStateEnum.Off:
+                return "bg-secondary text-white";
+            case Data.TransferData.FnStateEnum.Auto:
+                return "bg-danger text-white";
+        }
+        return null;
+    }
+}

@@ -35,6 +35,7 @@ namespace V.Server
             services.AddSingleton<Data.Errors>();
             services.AddSingleton<Services.SMSHttpClient>();
             services.AddHostedService<Services.SMSHostedService>();
+            services.AddSingleton<SyncLog>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

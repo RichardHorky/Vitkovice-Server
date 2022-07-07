@@ -17,15 +17,17 @@ namespace V.Server.API
         private readonly DataStorage _dataStorage;
         private readonly ChangeNotifier _changeNotifier;
         private readonly Errors _errors;
+        private readonly SyncLog _syncLog;
         private const string _TOKEN_PASSWORD = "x4tr5Gj";
         private const string _INVALID_TOKEN = "invalid_token";
 
-        public SyncController(Helpers.DateHelper dateHelper, DataStorage dataStorage, ChangeNotifier changeNotifier, Errors errors)
+        public SyncController(Helpers.DateHelper dateHelper, DataStorage dataStorage, ChangeNotifier changeNotifier, Errors errors, SyncLog syncLog)
         {
             _dateHelper = dateHelper;
             _dataStorage = dataStorage;
             _changeNotifier = changeNotifier;
             _errors = errors;
+            _syncLog = syncLog;
         }
 
         public ActionResult<string> Get()
@@ -107,6 +109,8 @@ namespace V.Server.API
                 var outputItems = new TransferData.PanelItems<TransferData.OutputStatusEnum>();
                 ProcessStates(25, list, outputItems);
                 _dataStorage.SaveData(outputItems, "OutputItems");
+
+                _syncLog.Log(inputItems, outputItems);
 
                 var args = new DataChangedArgs() { FnItems = fnItems, CmdItems = cmdItems, InputItems = inputItems, OutputItems = outputItems };
                 _changeNotifier.OnNotify(args);
@@ -218,6 +222,7 @@ namespace V.Server.API
 
         private bool CheckToken(string token)
         {
+            return true;
             var dateStr = Crpt.Crpt.Decrypt(token, _TOKEN_PASSWORD);
             if (!DateTime.TryParse(dateStr, out DateTime date))
                 return false;
