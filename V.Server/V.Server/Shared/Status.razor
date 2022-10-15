@@ -286,6 +286,29 @@
         </div>
     </div>
     <div class="col-lg-6">
+        <div class="row mt-4">
+            <div class="d-flex col-lg-4 col-md-4 col-sm-4">
+                <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR1" />
+                <div class="my-auto">Číst TR1</div>
+                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR1, "led-red")">
+                    <i class="fas fa-circle"></i>
+                </div>
+            </div>
+            <div class="d-flex col-lg-4 col-md-4 col-sm-4">
+                <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR2" />
+                <div class="my-auto">Číst TR2</div>
+                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR2, "led-red")">
+                    <i class="fas fa-circle"></i>
+                </div>
+            </div>
+            <div class="d-flex col-lg-4 col-md-4 col-sm-4">
+                <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR3" />
+                <div class="my-auto">Číst TR3</div>
+                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR3, "led-red")">
+                    <i class="fas fa-circle"></i>
+                </div>
+            </div>
+        </div>
         <div class="panel details">
             <div class="row">
                 <div class="col-sm-6"><b>Vstupy</b></div>
@@ -386,6 +409,40 @@
     bool _disposed;
     string _error;
 
+    //room termostats
+    bool _termostatR1;
+    bool TermostatR1
+    {
+        get => _termostatR1;
+        set
+        {
+            _termostatR1 = value;
+            RoomTermChanged(Data.TransferData.ButtonPressEnum.TermostatR1, value);
+        }
+    }
+
+    bool _termostatR2;
+    bool TermostatR2
+    {
+        get => _termostatR2;
+        set
+        {
+            _termostatR2 = value;
+            RoomTermChanged(Data.TransferData.ButtonPressEnum.TermostatR2, value);
+        }
+    }
+
+    bool _termostatR3;
+    bool TermostatR3
+    {
+        get => _termostatR3;
+        set
+        {
+            _termostatR3 = value;
+            RoomTermChanged(Data.TransferData.ButtonPressEnum.TermostatR3, value);
+        }
+    }
+
     protected override void OnInitialized()
     {
         try
@@ -419,6 +476,8 @@
             var outputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>>("OutputItems");
             if (outputItems != null)
                 _outputItems = outputItems;
+
+            LoadRoomsTerms();
 
             DataLoop();
         }
@@ -538,6 +597,20 @@
         }
     }
 
+    void RoomTermChanged(Data.TransferData.ButtonPressEnum buttonPress, bool isAuto)
+    {
+        try
+        {
+            _fnItems.SetState(buttonPress, isAuto ? Data.TransferData.FnStateEnum.Auto : Data.TransferData.FnStateEnum.Off, true);
+            DataStorage.SaveData(_fnItems);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.ToString();
+            Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
+        }
+    }
+
     string GetCmdClass(Data.TransferData.ButtonPressEnum buttonPress)
     {
         try
@@ -585,12 +658,20 @@
         {
             _fnItems.Reset();
             DataStorage.SaveData(_fnItems);
+            LoadRoomsTerms();
         }
         catch (Exception ex)
         {
             _error = ex.ToString();
             Errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
         }
+    }
+
+    void LoadRoomsTerms()
+    {
+        _termostatR1 = _fnItems.GetState(Data.TransferData.ButtonPressEnum.TermostatR1) == Data.TransferData.FnStateEnum.Auto;
+        _termostatR2 = _fnItems.GetState(Data.TransferData.ButtonPressEnum.TermostatR2) == Data.TransferData.FnStateEnum.Auto;
+        _termostatR3 = _fnItems.GetState(Data.TransferData.ButtonPressEnum.TermostatR3) == Data.TransferData.FnStateEnum.Auto;
     }
 
     void ResetCmdItems()

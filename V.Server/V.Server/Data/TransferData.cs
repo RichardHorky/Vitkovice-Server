@@ -20,7 +20,10 @@ namespace V.Server.Data
             AlarmRound1 = 0x100,        //256
             AlarmRound2 = 0x200,        //512
             Valv1Status = 0x400,        //1024
-            Valv2Status = 0x800         //2048
+            Valv2Status = 0x800,        //2048
+            TermostatR1 = 0x1000,       //4096
+            TermostatR2 = 0x2000,       //8192
+            TermostatR3 = 0x4000        //16384
         }
 
         public enum OutputStatusEnum
@@ -49,7 +52,10 @@ namespace V.Server.Data
             ElHeating = 0x20,           //32
             Water = 0x40,               //64
             Cams = 0x80,                //128
-            Alarm = 0x100               //256
+            Alarm = 0x100,              //256
+            TermostatR1 = 0x200,        //512
+            TermostatR2 = 0x400,        //1024
+            TermostatR3 = 0x800         //2048
         }
 
         public enum FnStateEnum : byte
@@ -92,6 +98,9 @@ namespace V.Server.Data
                 Date = DateTime.MinValue;
                 foreach (var item in Items)
                     item.FnState = FnStateEnum.Auto;
+                SetState(ButtonPressEnum.TermostatR1, FnStateEnum.Off);
+                SetState(ButtonPressEnum.TermostatR2, FnStateEnum.Off);
+                SetState(ButtonPressEnum.TermostatR3, FnStateEnum.Off);
             }
             public List<FnItem> Items { get; set; } = new List<FnItem>();
             public void SwitchItem(ButtonPressEnum buttonPress)
@@ -113,7 +122,7 @@ namespace V.Server.Data
                     return FnStateEnum.Auto;
                 return item.FnState;
             }
-            public void SetState(ButtonPressEnum buttonPress, FnStateEnum fnState)
+            public void SetState(ButtonPressEnum buttonPress, FnStateEnum fnState, bool sendToClient = false)
             {
                 var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
                 if (item == null)
@@ -122,6 +131,11 @@ namespace V.Server.Data
                     Items.Add(item);
                 }
                 item.FnState = fnState;
+                if (sendToClient)
+                {
+                    Date = DateTime.UtcNow;
+                    Source = SourceEnum.Server;
+                }
             }
             public bool Valid => Source == SourceEnum.Server && (DateTime.UtcNow - Date).TotalSeconds <= _EXP_SECONDS;
         }

@@ -44,6 +44,9 @@ namespace V.Server.API
             };
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.TermostatR1, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.TermostatR2, fnItems);
+                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.TermostatR3, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.ElHeating, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Water, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
@@ -174,17 +177,20 @@ namespace V.Server.API
         {
             ProcessState(items[3], TransferData.ButtonPressEnum.Termostat1, fnItems);
             ProcessState(items[4], TransferData.ButtonPressEnum.Termostat2, fnItems);
-            ProcessState(items[5], TransferData.ButtonPressEnum.ElHeating, fnItems);
-            ProcessState(items[6], TransferData.ButtonPressEnum.Water, fnItems);
-            ProcessState(items[7], TransferData.ButtonPressEnum.Cams, fnItems);
-            ProcessState(items[8], TransferData.ButtonPressEnum.Alarm, fnItems);
+            ProcessState(items[5], TransferData.ButtonPressEnum.TermostatR1, fnItems);
+            ProcessState(items[6], TransferData.ButtonPressEnum.TermostatR2, fnItems);
+            ProcessState(items[7], TransferData.ButtonPressEnum.TermostatR3, fnItems);
+            ProcessState(items[8], TransferData.ButtonPressEnum.ElHeating, fnItems);
+            ProcessState(items[9], TransferData.ButtonPressEnum.Water, fnItems);
+            ProcessState(items[10], TransferData.ButtonPressEnum.Cams, fnItems);
+            ProcessState(items[11], TransferData.ButtonPressEnum.Alarm, fnItems);
         }
 
         private void ProcessStates(string[] items, TransferData.CmdItems cmdItems)
         {
-            ProcessState(items[10], TransferData.ButtonPressEnum.GSM, cmdItems);
-            ProcessState(items[11], TransferData.ButtonPressEnum.WIFI, cmdItems);
-            ProcessState(items[12], TransferData.ButtonPressEnum.AlarmOff, cmdItems);
+            ProcessState(items[13], TransferData.ButtonPressEnum.GSM, cmdItems);
+            ProcessState(items[14], TransferData.ButtonPressEnum.WIFI, cmdItems);
+            ProcessState(items[15], TransferData.ButtonPressEnum.AlarmOff, cmdItems);
         }
 
         private void ProcessStates<T>(int startPos, string[] items, TransferData.PanelItems<T> panelItems) where T: Enum
