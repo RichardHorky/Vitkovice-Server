@@ -13,17 +13,17 @@ namespace V.Server.Data
             FireplaceAkum = 0x2,        //2
             Termostat1 = 0x4,           //4
             Termostat2 = 0x8,           //8
-            DiffTerm = 0x10,            //16
-            PipeTerm = 0x20,            //32
-            SMSWater = 0x40,            //64
-            AlarmKey = 0x80,            //128
-            AlarmRound1 = 0x100,        //256
-            AlarmRound2 = 0x200,        //512
-            Valv1Status = 0x400,        //1024
-            Valv2Status = 0x800,        //2048
-            TermostatR1 = 0x1000,       //4096
-            TermostatR2 = 0x2000,       //8192
-            TermostatR3 = 0x4000        //16384
+            TermostatR1 = 0x10,         //16
+            TermostatR2 = 0x20,         //32
+            TermostatR3 = 0x40,         //64
+            DiffTerm = 0x80,            //128
+            PipeTerm = 0x100,           //256
+            SMSWater = 0x200,           //512
+            AlarmKey = 0x400,           //1024
+            AlarmRound1 = 0x800,        //2048
+            AlarmRound2 = 0x1000,       //4096
+            Valv1Status = 0x2000,       //8192
+            Valv2Status = 0x4000        //16384
         }
 
         public enum OutputStatusEnum
@@ -37,7 +37,7 @@ namespace V.Server.Data
             Cams = 0x40,                //64
             Alarm = 0x80,               //128
             ResetGSM = 0x100,           //256
-            Valv1 = 0x200,               //512
+            Valv1 = 0x200,              //512
             Valv2 = 0x400,              //1024
             Valv3 = 0x800               //2048
         }
@@ -49,13 +49,13 @@ namespace V.Server.Data
             AlarmOff = 0x4,             //4
             Termostat1 = 0x8,           //8
             Termostat2 = 0x10,          //16
-            ElHeating = 0x20,           //32
-            Water = 0x40,               //64
-            Cams = 0x80,                //128
-            Alarm = 0x100,              //256
-            TermostatR1 = 0x200,        //512
-            TermostatR2 = 0x400,        //1024
-            TermostatR3 = 0x800         //2048
+            TermostatR1 = 0x20,         //32
+            TermostatR2 = 0x40,         //64
+            TermostatR3 = 0x80,         //128
+            ElHeating = 0x100,          //256
+            Water = 0x200,              //512
+            Cams = 0x400,               //1024
+            Alarm = 0x800               //2048
         }
 
         public enum FnStateEnum : byte
