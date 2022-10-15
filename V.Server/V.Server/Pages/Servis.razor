@@ -46,13 +46,16 @@
             var fnRecovery = DataStorage.GetData<TransferData.FnItems>("FnRecovery");
             if (fnRecovery == null)
             {
-                _recoveryStr = "{1|1|1|1|1|1}";
+                _recoveryStr = "{1|1|0|0|0|1|1|1|1}";
                 return;
             }
 
             var items = new List<string>();
             items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat1)).ToString());
             items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat2)).ToString());
+            items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.TermostatR1)).ToString());
+            items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.TermostatR2)).ToString());
+            items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.TermostatR3)).ToString());
             items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.ElHeating)).ToString());
             items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Water)).ToString());
             items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Cams)).ToString());

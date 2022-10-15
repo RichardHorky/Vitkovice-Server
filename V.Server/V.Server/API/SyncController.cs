@@ -139,6 +139,9 @@ namespace V.Server.API
                 var items = new List<string>();
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat1)).ToString());
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Termostat2)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.TermostatR1)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.TermostatR2)).ToString());
+                items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.TermostatR3)).ToString());
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.ElHeating)).ToString());
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Water)).ToString());
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Cams)).ToString());
