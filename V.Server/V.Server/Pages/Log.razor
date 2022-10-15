@@ -11,20 +11,19 @@
         odd = !odd;
         var bgClass = odd ? "bg-dark text-white" : "bg-secondary text-white";
     <div class="row">
-        <div class="col-md-1 @bgClass">
+        <div class="col-md-2 @bgClass">
             @($"{(new Helpers.DateHelper().GetCentralDate(logItem.Date)):G}")
         </div>
-        <div class="col-md-5 bg-primary pb-1">
-            <div class="row">
+        <div class="col-md-10">
+            <div class="row bg-primary pl-1">
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat1), bgClass)">T1</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Termostat2), bgClass)">T2</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.TermostatR1), bgClass)">TR1</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.TermostatR2), bgClass)">TR2</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.TermostatR3), bgClass)">TR3</div>
+                <div class="col-md-7 @GetStatusClass(Data.TransferData.FnStateEnum.Off, bgClass)"></div>
             </div>
-        </div>
-        <div class="col-md-5 bg-primary pb-1">
-            <div class="row">
+            <div class="row bg-primary pl-1">
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplacePump), bgClass)">FireP</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.FireplaceAkum), bgClass)">FireAk</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.DiffTerm), bgClass)">DiffT</div>
@@ -35,10 +34,9 @@
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.AlarmRound2), bgClass)">Alarm2</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv1Status), bgClass)">Valv1</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Inputs.GetState(Data.TransferData.InputStatusEnum.Valv2Status), bgClass)">Valv2</div>
+                <div class="col-md-2 @GetStatusClass(Data.TransferData.FnStateEnum.Off, bgClass)"></div>
             </div>
-        </div>
-        <div class="col-md-5 bg-info pb-1">
-            <div class="row">
+            <div class="row bg-info pl-1">
                 <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeating), bgClass)">ElHeat</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.ElHeatingPump), bgClass)">ElHeatP</div>
                 <div class="col-md-1 @GetStatusClass(logItem.Outputs.GetState(Data.TransferData.OutputStatusEnum.PumpAku), bgClass)">AkuP</div>
@@ -66,6 +64,7 @@
 
     protected override void OnInitialized()
     {
+        SyncLog.Add(new Data.LogItem());
         ChangeNotifier.Notify += DataChanged;
     }
 
