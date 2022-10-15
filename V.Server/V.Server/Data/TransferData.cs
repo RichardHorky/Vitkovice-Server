@@ -119,7 +119,7 @@ namespace V.Server.Data
             {
                 var item = Items.Where(i => i.ButtonStatus == buttonPress).FirstOrDefault();
                 if (item == null)
-                    return FnStateEnum.Auto;
+                    return (buttonPress == ButtonPressEnum.TermostatR1 || buttonPress == ButtonPressEnum.TermostatR2 || buttonPress == ButtonPressEnum.TermostatR3) ? FnStateEnum.Off : FnStateEnum.Auto;
                 return item.FnState;
             }
             public void SetState(ButtonPressEnum buttonPress, FnStateEnum fnState, bool sendToClient = false)
