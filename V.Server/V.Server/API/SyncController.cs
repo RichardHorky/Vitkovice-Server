@@ -110,7 +110,7 @@ namespace V.Server.API
                 _dataStorage.SaveData(inputItems, "InputItems");
 
                 var outputItems = new TransferData.PanelItems<TransferData.OutputStatusEnum>();
-                ProcessStates(25, list, outputItems);
+                ProcessStates(28, list, outputItems);
                 _dataStorage.SaveData(outputItems, "OutputItems");
 
                 _syncLog.Log(inputItems, outputItems);
@@ -196,7 +196,7 @@ namespace V.Server.API
         private void ProcessStates<T>(int startPos, string[] items, TransferData.PanelItems<T> panelItems) where T: Enum
         {
             var enumList = Enum.GetValues(typeof(T)).Cast<T>().ToArray();
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < enumList.Length; i++)
             {
                 if (byte.TryParse(items[startPos + i], out byte iState))
                 {
