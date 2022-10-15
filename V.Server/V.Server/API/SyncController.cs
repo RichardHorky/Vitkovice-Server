@@ -84,7 +84,14 @@ namespace V.Server.API
                 //is valid waiting - skip it
                 if (!validWaiting)
                 {
+                    //prevent loosing of rooms terms info
+                    var tR1Handle = fnItems.GetState(TransferData.ButtonPressEnum.TermostatR1);
+                    var tR2Handle = fnItems.GetState(TransferData.ButtonPressEnum.TermostatR2);
+                    var tR3Handle = fnItems.GetState(TransferData.ButtonPressEnum.TermostatR3);
                     fnItems = new TransferData.FnItems();
+                    fnItems.SetState(TransferData.ButtonPressEnum.TermostatR1, tR1Handle);
+                    fnItems.SetState(TransferData.ButtonPressEnum.TermostatR2, tR2Handle);
+                    fnItems.SetState(TransferData.ButtonPressEnum.TermostatR3, tR3Handle);
                     ProcessStates(list, fnItems);
                     fnItems.Source = TransferData.SourceEnum.Arduino;
                     fnItems.Date = DateTime.UtcNow;
