@@ -286,26 +286,28 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="row mt-4">
-            <div class="d-flex col-lg-4 col-md-4 col-sm-4">
-                <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR1" />
-                <div class="my-auto">Číst TR1</div>
-                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR1, "led-red")">
-                    <i class="fas fa-circle"></i>
+        <div class="panel details">
+            <div class="row">
+                <div class="d-flex col-lg-4 col-md-4 col-sm-4">
+                    <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR1" />
+                    <div class="my-auto">Číst TR1</div>
+                    <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR1, "led-red")">
+                        <i class="fas fa-circle"></i>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex col-lg-4 col-md-4 col-sm-4">
-                <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR2" />
-                <div class="my-auto">Číst TR2</div>
-                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR2, "led-red")">
-                    <i class="fas fa-circle"></i>
+                <div class="d-flex col-lg-4 col-md-4 col-sm-4">
+                    <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR2" />
+                    <div class="my-auto">Číst TR2</div>
+                    <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR2, "led-red")">
+                        <i class="fas fa-circle"></i>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex col-lg-4 col-md-4 col-sm-4">
-                <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR3" />
-                <div class="my-auto">Číst TR3</div>
-                <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR3, "led-red")">
-                    <i class="fas fa-circle"></i>
+                <div class="d-flex col-lg-4 col-md-4 col-sm-4">
+                    <input class="my-auto mr-1" type="checkbox" @bind="@TermostatR3" />
+                    <div class="my-auto">Číst TR3</div>
+                    <div class="led-item @GetStatusClass(Data.TransferData.InputStatusEnum.TermostatR3, "led-red")">
+                        <i class="fas fa-circle"></i>
+                    </div>
                 </div>
             </div>
         </div>
