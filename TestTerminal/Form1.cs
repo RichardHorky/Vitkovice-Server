@@ -10,13 +10,14 @@ using System.Windows.Forms;
 using System.Net.Http;
 
 using V.Server.Data;
+using static System.Net.WebRequestMethods;
 
 namespace TestTerminal
 {
     public partial class Form1 : Form
     {
         private readonly HttpClient _client;
-        private const string _BASE_ADDRESS = "http://192.168.2.6:5000/";
+        private const string _BASE_ADDRESS = "https://localhost:5001/";
         private const int _SYNC_SPAN = 20;
         private const int _DISP_TIME_SPAN = 10;
         private bool _divider;
@@ -28,6 +29,8 @@ namespace TestTerminal
 
         TransferData.FnItems _fnItems = new TransferData.FnItems();
         TransferData.CmdItems _cmdItems = new TransferData.CmdItems();
+        TransferData.PanelItems<TransferData.InputStatusEnum> _inputItems = new TransferData.PanelItems<TransferData.InputStatusEnum>();
+        TransferData.PanelItems<TransferData.OutputStatusEnum> _outputItems = new TransferData.PanelItems<TransferData.OutputStatusEnum>();
 
         public Form1()
         {
@@ -80,6 +83,35 @@ namespace TestTerminal
             AddItemToList(itemsList, TransferData.ButtonPressEnum.GSM, _cmdItems);
             AddItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, _cmdItems);
             AddItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, _cmdItems);
+
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.FireplacePump) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.FireplaceAkum) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.Termostat1) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.Termostat2) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.TermostatR1) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.TermostatR2) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.TermostatR3) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.DiffTerm) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.PipeTerm) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.SMSWater) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.AlarmKey) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.AlarmRound1) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.AlarmRound2) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.Valv1Status) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_inputItems.GetState(TransferData.InputStatusEnum.Valv2Status) == TransferData.FnStateEnum.Off ? "0" : "1");
+
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.ElHeating) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.ElHeatingPump) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.PumpAku) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.WifiReset) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Zone) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Water) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Cams) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Alarm) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.ResetGSM) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Valv1) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Valv2) == TransferData.FnStateEnum.Off ? "0" : "1");
+            itemsList.Add(_outputItems.GetState(TransferData.OutputStatusEnum.Valv3) == TransferData.FnStateEnum.Off ? "0" : "1");
 
             var dataStr = string.Join("|", itemsList);
 

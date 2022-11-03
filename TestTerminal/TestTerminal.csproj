@@ -52,9 +52,13 @@
     <Compile Include="..\V.Server\V.Server\Data\DataStorage.cs">
       <Link>DataStorage.cs</Link>
     </Compile>
+    <Compile Include="..\V.Server\V.Server\Data\ErrorModel.cs">
+      <Link>ErrorModel.cs</Link>
+    </Compile>
     <Compile Include="..\V.Server\V.Server\Data\TransferData.cs">
       <Link>TransferData.cs</Link>
     </Compile>
+    <Compile Include="Errors.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

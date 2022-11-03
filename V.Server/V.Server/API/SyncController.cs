@@ -44,9 +44,9 @@ namespace V.Server.API
             };
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
-                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.TermostatR1, fnItems);
-                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.TermostatR2, fnItems);
-                AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.TermostatR3, fnItems);
+                itemsList.Add(fnItems.GetState(TransferData.ButtonPressEnum.TermostatR1) == TransferData.FnStateEnum.Off ? "0" : "1");
+                itemsList.Add(fnItems.GetState(TransferData.ButtonPressEnum.TermostatR2) == TransferData.FnStateEnum.Off ? "0" : "1");
+                itemsList.Add(fnItems.GetState(TransferData.ButtonPressEnum.TermostatR3) == TransferData.FnStateEnum.Off ? "0" : "1");
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.ElHeating, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Water, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
