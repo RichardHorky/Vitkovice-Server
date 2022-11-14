@@ -35,7 +35,7 @@ namespace V.Server.API
             try
             {
                 var seconds = _dateHelper.GetSeconds();
-                var fnItems = _dataStorage.GetData<Data.TransferData.FnItems>();
+                var fnItems = _dataStorage.GetData<Data.TransferData.FnItems>(out bool fileExists);
                 var itemsList = new List<string>()
             {
                 GetToken(),
@@ -52,7 +52,7 @@ namespace V.Server.API
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Cams, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Alarm, fnItems);
 
-                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>();
+                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>(out fileExists);
                 itemsList.Add((cmdItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (cmdItems?.Valid ?? false) ? cmdItems.ID : string.Empty);
                 AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.GSM, cmdItems);
                 AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.WIFI, cmdItems);
@@ -79,7 +79,7 @@ namespace V.Server.API
                 if (list.Length == 0 || !CheckToken(list[0]))
                     return Ok();
 
-                var fnItems = _dataStorage.GetData<TransferData.FnItems>() ?? new TransferData.FnItems();
+                var fnItems = _dataStorage.GetData<TransferData.FnItems>(out bool fileExists) ?? new TransferData.FnItems();
                 var validWaiting = fnItems.Source == TransferData.SourceEnum.Server && fnItems.Valid && list[2] != fnItems.ID;
                 //is valid waiting - skip it
                 if (!validWaiting)
@@ -89,10 +89,14 @@ namespace V.Server.API
                     var tR2Handle = fnItems.GetState(TransferData.ButtonPressEnum.TermostatR2);
                     var tR3Handle = fnItems.GetState(TransferData.ButtonPressEnum.TermostatR3);
                     fnItems = new TransferData.FnItems();
-                    fnItems.SetState(TransferData.ButtonPressEnum.TermostatR1, tR1Handle);
-                    fnItems.SetState(TransferData.ButtonPressEnum.TermostatR2, tR2Handle);
-                    fnItems.SetState(TransferData.ButtonPressEnum.TermostatR3, tR3Handle);
-                    ProcessStates(list, fnItems);
+                    //pool has not been cleared
+                    if (fileExists)
+                    {
+                        fnItems.SetState(TransferData.ButtonPressEnum.TermostatR1, tR1Handle);
+                        fnItems.SetState(TransferData.ButtonPressEnum.TermostatR2, tR2Handle);
+                        fnItems.SetState(TransferData.ButtonPressEnum.TermostatR3, tR3Handle);
+                    }
+                    ProcessStates(list, fnItems, fileExists);
                     fnItems.Source = TransferData.SourceEnum.Arduino;
                     fnItems.Date = DateTime.UtcNow;
                     _dataStorage.SaveData(fnItems);
@@ -100,8 +104,8 @@ namespace V.Server.API
                     _dataStorage.SaveData(fnItems, "FnRecovery");
                 }
 
-                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>() ?? new TransferData.CmdItems();
-                validWaiting = cmdItems.Source == TransferData.SourceEnum.Server && cmdItems.Valid && list[9] != cmdItems.ID;
+                var cmdItems = _dataStorage.GetData<TransferData.CmdItems>(out fileExists) ?? new TransferData.CmdItems();
+                validWaiting = cmdItems.Source == TransferData.SourceEnum.Server && cmdItems.Valid && list[12] != cmdItems.ID;
                 //is valid waiting - skip it
                 if (!validWaiting)
                 {
@@ -113,11 +117,11 @@ namespace V.Server.API
                 }
 
                 var inputItems = new TransferData.PanelItems<TransferData.InputStatusEnum>();
-                ProcessStates(13, list, inputItems);
+                ProcessStates(16, list, inputItems);
                 _dataStorage.SaveData(inputItems, "InputItems");
 
                 var outputItems = new TransferData.PanelItems<TransferData.OutputStatusEnum>();
-                ProcessStates(28, list, outputItems);
+                ProcessStates(31, list, outputItems);
                 _dataStorage.SaveData(outputItems, "OutputItems");
 
                 _syncLog.Log(inputItems, outputItems);
@@ -139,7 +143,7 @@ namespace V.Server.API
         {
             try
             {
-                var fnRecovery = _dataStorage.GetData<TransferData.FnItems>("FnRecovery");
+                var fnRecovery = _dataStorage.GetData<TransferData.FnItems>(out bool fileExists, "FnRecovery");
                 if (fnRecovery == null)
                     return Ok("{1|1|0|0|0|1|1|1|1}");
 
@@ -183,21 +187,27 @@ namespace V.Server.API
             list.Add((cmdItems?.Source ?? TransferData.SourceEnum.Arduino) == TransferData.SourceEnum.Server && (cmdItems?.Valid ?? false) ? (cmdItems.GetPressed(buttonPress) ? "1" : "0") : string.Empty);
         }
 
-        private void ProcessStates(string[] items, TransferData.FnItems fnItems)
+        private void ProcessStates(string[] items, TransferData.FnItems fnItems, bool fileEdists)
         {
             ProcessState(items[3], TransferData.ButtonPressEnum.Termostat1, fnItems);
             ProcessState(items[4], TransferData.ButtonPressEnum.Termostat2, fnItems);
-            ProcessState(items[5], TransferData.ButtonPressEnum.ElHeating, fnItems);
-            ProcessState(items[6], TransferData.ButtonPressEnum.Water, fnItems);
-            ProcessState(items[7], TransferData.ButtonPressEnum.Cams, fnItems);
-            ProcessState(items[8], TransferData.ButtonPressEnum.Alarm, fnItems);
+            if (!fileEdists)
+            {
+                ProcessState(items[5], TransferData.ButtonPressEnum.TermostatR1, fnItems);
+                ProcessState(items[6], TransferData.ButtonPressEnum.TermostatR2, fnItems);
+                ProcessState(items[7], TransferData.ButtonPressEnum.TermostatR3, fnItems);
+            }
+            ProcessState(items[8], TransferData.ButtonPressEnum.ElHeating, fnItems);
+            ProcessState(items[9], TransferData.ButtonPressEnum.Water, fnItems);
+            ProcessState(items[10], TransferData.ButtonPressEnum.Cams, fnItems);
+            ProcessState(items[11], TransferData.ButtonPressEnum.Alarm, fnItems);
         }
 
         private void ProcessStates(string[] items, TransferData.CmdItems cmdItems)
         {
-            ProcessState(items[10], TransferData.ButtonPressEnum.GSM, cmdItems);
-            ProcessState(items[11], TransferData.ButtonPressEnum.WIFI, cmdItems);
-            ProcessState(items[12], TransferData.ButtonPressEnum.AlarmOff, cmdItems);
+            ProcessState(items[13], TransferData.ButtonPressEnum.GSM, cmdItems);
+            ProcessState(items[14], TransferData.ButtonPressEnum.WIFI, cmdItems);
+            ProcessState(items[15], TransferData.ButtonPressEnum.AlarmOff, cmdItems);
         }
 
         private void ProcessStates<T>(int startPos, string[] items, TransferData.PanelItems<T> panelItems) where T: Enum

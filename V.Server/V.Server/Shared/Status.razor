@@ -451,7 +451,7 @@
         {
             ChangeNotifier.Notify += OnNotify;
 
-            var fnItems = DataStorage.GetData<Data.TransferData.FnItems>();
+            var fnItems = DataStorage.GetData<Data.TransferData.FnItems>(out bool fileExists);
             if (fnItems == null)
             {
                 _fnItems = new Data.TransferData.FnItems();
@@ -462,7 +462,7 @@
                 _fnItems = fnItems;
             }
 
-            var cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>();
+            var cmdItems = DataStorage.GetData<Data.TransferData.CmdItems>(out fileExists);
             if (cmdItems == null)
             {
                 _cmdItems = new Data.TransferData.CmdItems();
@@ -472,10 +472,10 @@
                 _cmdItems = cmdItems;
             }
 
-            var inputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum>>("InputItems");
+            var inputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.InputStatusEnum>>(out fileExists, "InputItems");
             if (inputItems != null)
                 _inputItems = inputItems;
-            var outputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>>("OutputItems");
+            var outputItems = DataStorage.GetData<Data.TransferData.PanelItems<Data.TransferData.OutputStatusEnum>>(out fileExists, "OutputItems");
             if (outputItems != null)
                 _outputItems = outputItems;
 

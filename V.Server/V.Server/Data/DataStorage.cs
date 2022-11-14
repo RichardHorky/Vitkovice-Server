@@ -32,14 +32,16 @@ namespace V.Server.Data
             }
         }
 
-        public T GetData<T>(string name = null)
+        public T GetData<T>(out bool fileExists, string name = null)
         {
+            fileExists = false;
             try
             {
                 var fileName = GetFileName<T>(name);
                 if (!File.Exists(fileName))
                     return default(T);
                 var strData = File.ReadAllText(fileName);
+                fileExists = true;
                 return JsonConvert.DeserializeObject<T>(strData);
             }
             catch (Exception ex)

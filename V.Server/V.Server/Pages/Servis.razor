@@ -43,7 +43,7 @@
     {
         try
         {
-            var fnRecovery = DataStorage.GetData<TransferData.FnItems>("FnRecovery");
+            var fnRecovery = DataStorage.GetData<TransferData.FnItems>(out bool fileExists, "FnRecovery");
             if (fnRecovery == null)
             {
                 _recoveryStr = "{1|1|0|0|0|1|1|1|1}";

@@ -47,7 +47,7 @@ namespace V.Server.Services
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var dataStorage = scope.ServiceProvider.GetRequiredService<Data.DataStorage>();
-                    var fnItems = dataStorage.GetData<Data.TransferData.FnItems>();
+                    var fnItems = dataStorage.GetData<Data.TransferData.FnItems>(out bool fileExists);
                     if ((DateTime.UtcNow - fnItems.Date).TotalMinutes > _loopMinutes)
                         await _smsHttpClient.SendSMS("Arduino zdechlo!", OnException);
                 }

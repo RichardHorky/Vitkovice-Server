@@ -70,8 +70,14 @@ namespace TestTerminal
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.chAutoSync = new System.Windows.Forms.CheckBox();
+            this.chReadTR1 = new DevExpress.XtraEditors.CheckEdit();
+            this.chReadTR2 = new DevExpress.XtraEditors.CheckEdit();
+            this.chReadTR3 = new DevExpress.XtraEditors.CheckEdit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panDisplay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chReadTR1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chReadTR2.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chReadTR3.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -500,11 +506,38 @@ namespace TestTerminal
             this.chAutoSync.Text = "Auto sync";
             this.chAutoSync.UseVisualStyleBackColor = true;
             // 
+            // chReadTR1
+            // 
+            this.chReadTR1.Location = new System.Drawing.Point(324, 429);
+            this.chReadTR1.Name = "chReadTR1";
+            this.chReadTR1.Properties.Caption = "Číst TR1";
+            this.chReadTR1.Size = new System.Drawing.Size(75, 20);
+            this.chReadTR1.TabIndex = 4;
+            // 
+            // chReadTR2
+            // 
+            this.chReadTR2.Location = new System.Drawing.Point(440, 429);
+            this.chReadTR2.Name = "chReadTR2";
+            this.chReadTR2.Properties.Caption = "Číst TR2";
+            this.chReadTR2.Size = new System.Drawing.Size(75, 20);
+            this.chReadTR2.TabIndex = 5;
+            // 
+            // chReadTR3
+            // 
+            this.chReadTR3.Location = new System.Drawing.Point(558, 429);
+            this.chReadTR3.Name = "chReadTR3";
+            this.chReadTR3.Properties.Caption = "Číst TR3";
+            this.chReadTR3.Size = new System.Drawing.Size(75, 20);
+            this.chReadTR3.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(840, 694);
+            this.Controls.Add(this.chReadTR3);
+            this.Controls.Add(this.chReadTR2);
+            this.Controls.Add(this.chReadTR1);
             this.Controls.Add(this.chAutoSync);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -513,6 +546,9 @@ namespace TestTerminal
             this.Text = "Form1";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panDisplay.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chReadTR1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chReadTR2.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chReadTR3.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -560,6 +596,9 @@ namespace TestTerminal
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox chAutoSync;
+        private DevExpress.XtraEditors.CheckEdit chReadTR1;
+        private DevExpress.XtraEditors.CheckEdit chReadTR2;
+        private DevExpress.XtraEditors.CheckEdit chReadTR3;
     }
 }
 
