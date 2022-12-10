@@ -22,15 +22,18 @@ namespace V.Server
         {
             System.Diagnostics.Debug.WriteLine($"Request {httpContext.Request.Path}");
 
-            var list = new List<string>();
-            list.Add($"Path: {httpContext.Request.Path}");
-            list.Add($"QueryString: {httpContext.Request.QueryString.Value}");
-            list.Add($"Protocol: {httpContext.Request.Protocol}");
-            list.Add($"Method: {httpContext.Request.Method}");
-            list.Add($"IsHttps: {httpContext.Request.IsHttps}");
-            foreach (var item in httpContext.Request.Headers)
-                list.Add($"{item.Key} = {item.Value}");
-            _changeNotifier.OnNotify(list);
+            if (httpContext.Request.Path.ToString().ToUpper().Contains("/API/"))
+            {
+                var list = new List<string>();
+                list.Add($"Path: {httpContext.Request.Path}");
+                list.Add($"QueryString: {httpContext.Request.QueryString.Value}");
+                list.Add($"Protocol: {httpContext.Request.Protocol}");
+                list.Add($"Method: {httpContext.Request.Method}");
+                list.Add($"IsHttps: {httpContext.Request.IsHttps}");
+                foreach (var item in httpContext.Request.Headers)
+                    list.Add($"{item.Key} = {item.Value}");
+                _changeNotifier.OnNotify(list);
+            }
 
             await _next(httpContext);
         }
