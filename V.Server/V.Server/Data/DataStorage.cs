@@ -4,16 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace V.Server.Data
 {
     public class DataStorage
     {
         private readonly Errors _errors;
+        private readonly ILogger<DataStorage> _logger;
 
-        public DataStorage(Errors errors)
+        public DataStorage(Errors errors, ILogger<DataStorage> logger)
         {
             _errors = errors;
+            _logger = logger;
         }
 
         public void SaveData<T>(T data, string name = null)
@@ -28,6 +31,7 @@ namespace V.Server.Data
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
         }
@@ -46,6 +50,7 @@ namespace V.Server.Data
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
             return default(T);
@@ -61,6 +66,7 @@ namespace V.Server.Data
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
             return null;

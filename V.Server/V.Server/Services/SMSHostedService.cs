@@ -4,27 +4,33 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+using V.Server.Data;
 
 namespace V.Server.Services
 {
     public class SMSHostedService : HostedService
     {
         private readonly SMSHttpClient _smsHttpClient;
-        private readonly Data.Errors _errors;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly Data.ChangeNotifier _changeNotifier;
+        private readonly Errors _errors;
+        private readonly ChangeNotifier _changeNotifier;
+        private readonly ILogger<SMSHostedService> _logger;
+        private readonly GlobalData _globalData;
         private const int _loopMinutes = 5;
 
         public SMSHostedService(
             SMSHttpClient smsHttpClient,
-            Data.Errors errors,
-            IServiceProvider serviceProvider,
-            Data.ChangeNotifier changeNotifier)
+            Errors errors,
+            ChangeNotifier changeNotifier,
+            ILogger<SMSHostedService> logger,
+            GlobalData globalData)
         {
             _smsHttpClient = smsHttpClient;
             _errors = errors;
-            _serviceProvider = serviceProvider;
             _changeNotifier = changeNotifier;
+            _logger = logger;
+            _globalData = globalData;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -44,22 +50,19 @@ namespace V.Server.Services
         {
             try
             {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var dataStorage = scope.ServiceProvider.GetRequiredService<Data.DataStorage>();
-                    var fnItems = dataStorage.GetData<Data.TransferData.FnItems>(out bool fileExists);
-                    if ((DateTime.UtcNow - fnItems.Date).TotalMinutes > _loopMinutes)
-                        await _smsHttpClient.SendSMS("Arduino zdechlo!", OnException);
-                }
+                if ((DateTime.Now - _globalData.LastArduinoRequest).TotalMinutes > _loopMinutes)
+                    await _smsHttpClient.SendSMS("Arduino zdechlo!", OnException);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new Data.ErrorModel(ex.ToString()));
             }
         }
 
         private void OnException(string msg)
         {
+            _logger.LogError(msg);
             _errors.ErrorList.Add(new Data.ErrorModel(msg));
         }
     }

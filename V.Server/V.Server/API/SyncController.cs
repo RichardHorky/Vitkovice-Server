@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,30 +20,38 @@ namespace V.Server.API
         private readonly ChangeNotifier _changeNotifier;
         private readonly Errors _errors;
         private readonly SyncLog _syncLog;
+        private readonly ILogger<SyncController> _logger;
+        private readonly GlobalData _globalData;
         private const string _TOKEN_PASSWORD = "x4tr5Gj";
         private const string _INVALID_TOKEN = "invalid_token";
 
-        public SyncController(Helpers.DateHelper dateHelper, DataStorage dataStorage, ChangeNotifier changeNotifier, Errors errors, SyncLog syncLog)
+        public SyncController(Helpers.DateHelper dateHelper, DataStorage dataStorage, ChangeNotifier changeNotifier, Errors errors, SyncLog syncLog,
+            ILogger<SyncController> logger, GlobalData globalData)
         {
             _dateHelper = dateHelper;
             _dataStorage = dataStorage;
             _changeNotifier = changeNotifier;
             _errors = errors;
             _syncLog = syncLog;
+            _logger = logger;
+            _globalData = globalData;
         }
 
         public ActionResult<string> Get()
         {
+            _logger.LogDebug("Get");
             try
             {
+                _globalData.LastArduinoRequest = DateTime.Now;
+
                 var seconds = _dateHelper.GetSeconds();
                 var fnItems = _dataStorage.GetData<Data.TransferData.FnItems>(out bool fileExists);
                 var itemsList = new List<string>()
-            {
-                GetToken(),
-                seconds.ToString(),
-                ((fnItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : string.Empty)
-            };
+                {
+                    GetToken(),
+                    seconds.ToString(),
+                    ((fnItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : string.Empty)
+                };
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
                 itemsList.Add(fnItems.GetState(TransferData.ButtonPressEnum.TermostatR1) == TransferData.FnStateEnum.Off ? "0" : "1");
@@ -59,11 +69,13 @@ namespace V.Server.API
                 AddCmdItemToList(itemsList, TransferData.ButtonPressEnum.AlarmOff, cmdItems);
 
                 var resStr = string.Join('|', itemsList);
+                _logger.LogDebug($"Get; result: {resStr}");
 
                 return Ok($"{{{resStr}}}");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
             return Ok();
@@ -73,8 +85,11 @@ namespace V.Server.API
         [Route("Post/{data}")]
         public ActionResult Post(string data)
         {
+            _logger.LogDebug($"POST; data: {data}");
             try
             {
+                _globalData.LastArduinoRequest = DateTime.Now;
+
                 var list = data.Split('|');
                 if (list.Length == 0 || !CheckToken(list[0]))
                     return Ok();
@@ -131,6 +146,7 @@ namespace V.Server.API
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
 
@@ -141,8 +157,11 @@ namespace V.Server.API
         [Route("Recovery")]
         public ActionResult<string> Recovery()
         {
+            _logger.LogDebug("Recovery");
             try
             {
+                _globalData.LastArduinoRequest = DateTime.Now;
+
                 var fnRecovery = _dataStorage.GetData<TransferData.FnItems>(out bool fileExists, "FnRecovery");
                 if (fnRecovery == null)
                     return Ok("{1|1|0|0|0|1|1|1|1}");
@@ -159,11 +178,13 @@ namespace V.Server.API
                 items.Add(((byte)fnRecovery.GetState(TransferData.ButtonPressEnum.Alarm)).ToString());
 
                 var resStr = string.Join('|', items);
+                _logger.LogDebug($"Recovery; result: {resStr}");
 
                 return Ok($"{{{resStr}}}");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 _errors.ErrorList.Add(new ErrorModel(ex.ToString()));
             }
             return Ok("{}");

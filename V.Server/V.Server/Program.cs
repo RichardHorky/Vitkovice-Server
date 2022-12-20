@@ -21,6 +21,15 @@ namespace V.Server
 
         public static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("hosting.json", optional: true)
+                .AddCommandLine(args)
+                .AddEnvironmentVariables()
+                .Build();
+
+            ConfigNLogger(config);
+
             CreateHostBuilder(args).Build().Run();
         }
 
