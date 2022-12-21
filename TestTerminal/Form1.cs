@@ -17,7 +17,7 @@ namespace TestTerminal
     public partial class Form1 : Form
     {
         private readonly HttpClient _client;
-        private const string _BASE_ADDRESS = "https://localhost:5001/";
+        private const string _BASE_ADDRESS = "http://objednani.isis.cz:26790/";
         private const int _SYNC_SPAN = 20;
         private const int _DISP_TIME_SPAN = 10;
         private bool _divider;
