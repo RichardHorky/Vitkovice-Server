@@ -12,7 +12,7 @@
         var bgClass = odd ? "bg-dark text-white" : "bg-secondary text-white";
     <div class="row">
         <div class="col-md-2 @bgClass">
-            @($"{(new Helpers.DateHelper().GetCentralDate(logItem.Date)):G}")
+            @($"{logItem.Date:G}")
         </div>
         <div class="col-md-10">
             <div class="row bg-primary pl-1">

@@ -85,7 +85,7 @@
             <div class="badge badge-info">@(_fnItems.Source == Data.TransferData.SourceEnum.Arduino ? "PANEL" : "SERVER")</div>
         </div>
         <div class="col-sm-3">
-            <div class="badge badge-info">@($"{(new Helpers.DateHelper().GetCentralDate(_fnItems.Date)):G}")</div>
+            <div class="badge badge-info">@($"{(DateHelper.GetCentralDate(_fnItems.Date)):G}")</div>
         </div>
         <div class="col-sm-3">
             <div class="badge badge-info">@($"{_fnItemsFromLastChange}")</div>
@@ -100,7 +100,7 @@
             <div class="badge badge-info">@(_cmdItems.Source == Data.TransferData.SourceEnum.Arduino ? "PANEL" : "SERVER")</div>
         </div>
         <div class="col-sm-3">
-            <div class="badge badge-info">@($"{(new Helpers.DateHelper().GetCentralDate(_cmdItems.Date)):G}")</div>
+            <div class="badge badge-info">@($"{(DateHelper.GetCentralDate(_cmdItems.Date)):G}")</div>
         </div>
         <div class="col-sm-3">
             <div class="badge badge-info">@($"{_cmdItemsFromLastChange}")</div>
@@ -395,16 +395,19 @@
 
 @code {
     [Inject]
-    public Data.DataStorage DataStorage { get; set; }
+    Data.DataStorage DataStorage { get; set; }
 
     [Inject]
-    public Data.ChangeNotifier ChangeNotifier { get; set; }
+    Data.ChangeNotifier ChangeNotifier { get; set; }
 
     [Inject]
-    public Data.Errors Errors { get; set; }
+    Data.Errors Errors { get; set; }
 
     [Inject]
-    public ILogger<Status> Logger { get; set; }
+    ILogger<Status> Logger { get; set; }
+
+    [Inject]
+    Helpers.DateHelper DateHelper { get; set; }
 
     Data.TransferData.FnItems _fnItems = new Data.TransferData.FnItems();
     Data.TransferData.CmdItems _cmdItems = new Data.TransferData.CmdItems();

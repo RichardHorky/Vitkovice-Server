@@ -5,13 +5,15 @@
 @foreach (var item in Errors.ErrorList)
 {
     <div class="row">
-        <div class="col-md-2">@(new Helpers.DateHelper().GetCentralDate(item.Date))</div>
+        <div class="col-md-2">@(DateHelper.GetCentralDate(item.Date))</div>
         <div class="col-md-2">@item.Text</div>
     </div>
 }
 
 @code {
     [Inject]
-    public Data.Errors Errors { get; set; }
+    Data.Errors Errors { get; set; }
 
+    [Inject]
+    Helpers.DateHelper DateHelper { get; set; }
 }
