@@ -50,7 +50,8 @@ namespace V.Server.API
                 {
                     GetToken(),
                     seconds.ToString(),
-                    ((fnItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : string.Empty)
+                    //fnItems.ID
+                    ((fnItems?.Source ?? TransferData.SourceEnum.None) == TransferData.SourceEnum.Server && (fnItems?.Valid ?? false) ? fnItems.ID : "NONE")
                 };
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat1, fnItems);
                 AddItemToList(itemsList, Data.TransferData.ButtonPressEnum.Termostat2, fnItems);
